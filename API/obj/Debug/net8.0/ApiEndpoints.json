@@ -1,0 +1,130 @@
+[
+  {
+    "ContainingType": "API.Controllers.TodoAppController",
+    "Method": "AddUser",
+    "RelativePath": "api/TodoApp/AddUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "numberOfDays",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "quantity",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "totalSpent",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "totalIfInvested",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.TodoAppController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/TodoApp/GetAllUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.TodoAppController",
+    "Method": "GetAllUsersCalculatedData",
+    "RelativePath": "api/TodoApp/GetAllUsersCalculatedData",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.TodoAppController",
+    "Method": "GetAllUsersCalculatedDataByType",
+    "RelativePath": "api/TodoApp/GetAllUsersCalculatedDataByType/{type}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "type",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.TodoAppController",
+    "Method": "GetToxinData",
+    "RelativePath": "api/TodoApp/GetToxinData",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.TodoAppController",
+    "Method": "GetToxinsDescriptions",
+    "RelativePath": "api/TodoApp/GetToxinsDescriptions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.TodoAppController",
+    "Method": "GetUserToxinsData",
+    "RelativePath": "api/TodoApp/GetUserToxinsData{numberOfDays}/{type}/{quantity}/{priceToday}/{futureDays}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "numberOfDays",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "type",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "quantity",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "priceToday",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "futureDays",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

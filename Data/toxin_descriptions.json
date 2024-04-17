@@ -1,0 +1,106 @@
+[
+  {
+    "toxin": "4-(methylnitrosamino)-1-(3-pyridyl)-1-butanone (NNK)",
+    "description": "4-(methylnitrosamino)-1-(3-pyridyl)-1-butanone (NNK) is a potent carcinogenic compound and is strongly associated with an increased risk of various cancers, including lung and pancreatic cancers, making it a significant contributor to smoking-related cancer deaths. Additionally, NNK can damage DNA, leading to mutations and the development of tumors. "
+  },
+  {
+    "toxin": "Acetaldehyde",
+    "description": "Chronic exposure to acetaldehyde through smoking is strongly linked to an increased risk of developing various cancers, including mouth, throat, and esophageal cancer. Additionally, it can contribute to respiratory problems, such as chronic obstructive pulmonary disease (COPD), and worsen cardiovascular health, leading to a higher risk of heart disease."
+  },
+  {
+    "toxin": "Acrolein",
+    "description": "Long-term exposure to acrolein can lead to chronic respiratory issues such as bronchitis and exacerbate pre-existing conditions like asthma. Prolonged exposure to acrolein is also associated with an increased risk of cardiovascular problems, including atherosclerosis and heart disease."
+  },
+  {
+    "toxin": "Benz[a]anthracene",
+    "description": "Benz[a]anthracene is a polycyclic aromatic hydrocarbon (PAH) found in environmental pollutants, including cigarette smoke and vehicle emissions. Long-term exposure to benz[a]anthracene is associated with an increased risk of developing various cancers, particularly lung and skin cancers."
+  },
+  {
+    "toxin": "Benzene",
+    "description": "Benzene is a carcinogenic chemical found in various industrial processes and products like gasoline and solvents. It is associated with an increased risk of developing various cancers, including leukemia and lymphoma. Additionally, benzene exposure can harm the bone marrow, leading to a decrease in red blood cells, potentially causing anemia."
+  },
+  {
+    "toxin": "Benzo[a]pyrene",
+    "description": "Exposure to benzo[a]pyrene is strongly linked to an increased risk of various cancers, particularly lung cancer."
+  },
+  {
+    "toxin": "Benzo[b + k]fluoranthene",
+    "description": "Benzo[b+k]fluoranthene is a polycyclic aromatic hydrocarbon (PAH) found in environmental pollutants and it is considered a potential carcinogen and is associated with an increased risk of developing various cancers, particularly lung and skin cancers. "
+  },
+  {
+    "toxin": "Cadmium",
+    "description": "Cadmium is a toxic heavy metal that can have significant long-term health effects when people are exposed to it, often through ingestion or inhalation. It is associated with kidney damage, bone weakening, and lung cancer when inhaled as fine particles. It can also harm the cardiovascular system and increase the risk of hypertension."
+  },
+  {
+    "toxin": "Carbon monoxide (CO)",
+    "description": "Exposure to carbon monoxide can lead to neurological problems, including memory loss and cognitive impairments. It can also contribute to cardiovascular issues, such as heart disease, and may worsen pre-existing conditions like chronic obstructive pulmonary disease (COPD). "
+  },
+  {
+    "toxin": "Chromium",
+    "description": "Chromium is used in various industries, including stainless steel production and leather tanning. It is associated with an increased risk of lung cancer when inhaled and can also cause skin irritation and allergic reactions upon contact."
+  },
+  {
+    "toxin": "Cobalt",
+    "description": "Prolonged exposure to cobalt, especially in the form of cobalt dust or fumes, can lead to a condition known as \"hard metal lung disease.\" This condition can result in respiratory symptoms such as coughing and shortness of breath. Cobalt is used in various industries, including the manufacturing of hard metals, batteries, and medical implants."
+  },
+  {
+    "toxin": "Crotonaldehyde",
+    "description": "Long-term exposure to crotonaldehyde can have detrimental effects on the body. It is associated with an increased risk of respiratory problems such as chronic bronchitis and can exacerbate existing respiratory conditions like asthma. Prolonged exposure to crotonaldehyde may also have adverse cardiovascular effects, contributing to the development of heart disease and hypertension."
+  },
+  {
+    "toxin": "Cuprum",
+    "description": "Cuprum is the Latin name for copper, exposure to elevated copper levels can cause symptoms such as nausea, vomiting, and gastrointestinal distress. In severe cases, it can lead to liver and kidney damage. "
+  },
+  {
+    "toxin": "Dibenzo[a, h]anthracene",
+    "description": "Dibenzo[a,h]anthracene is a polycyclic aromatic hydrocarbon (PAH) commonly found in environmental pollutants, such as vehicle emissions and industrial processes. It is associated with an increased risk of developing various cancers, particularly lung and skin cancers."
+  },
+  {
+    "toxin": "Dibenzo[a, h]anthracene",
+    "description": "It is a major contributor to cardiovascular diseases, such as heart disease and stroke. Nicotine addiction in terms of smoking, leads to increased risk of respiratory issues and various cancers, particularly lung cancer. "
+  },
+  {
+    "toxin": "Formaldehyde",
+    "description": "Exposure to formaldehyde is linked to an increased risk of respiratory problems such as chronic bronchitis and asthma. Prolonged exposure may also lead to skin irritation and dermatitis. Furthermore, there is a heightened risk of developing certain types of cancer, particularly nasopharyngeal cancer, as a result of extended exposure to formaldehyde."
+  },
+  {
+    "toxin": "Lead",
+    "description": "Exposure to lead, especially in children, can lead to developmental and cognitive issues, such as reduced IQ and learning disabilities. In adults, it can cause high blood pressure, kidney damage, and reproductive problems."
+  },
+  {
+    "toxin": "Nickel",
+    "description": "Prolonged exposure to nickel, particularly in its soluble and highly toxic forms, can lead to a condition known as \"nickel toxicity\" or \"nickel poisoning.\" This can result in symptoms such as skin rashes, respiratory problems, and even lung cancer when inhaled as fine particles."
+  },
+  {
+    "toxin": "Nicotine",
+    "description": "Nicotine increases the risk of heart disease, stroke, while also impacting mental health and oral health."
+  },
+  {
+    "toxin": "N’-nitrosoanabasine (NAB)",
+    "description": "Persistent exposure to NAB through smoking is closely linked to an elevated risk of various cancers, particularly those affecting the mouth and esophagus. Moreover, it can contribute to cardiovascular issues and respiratory problems."
+  },
+  {
+    "toxin": "N’-nitrosoanatabine (NAT)",
+    "description": "Exposure to NAT through smoking is closely linked to an elevated risk of various cancers, particularly those affecting the oral cavity and esophagus. Moreover, NAT can contribute to cardiovascular issues and respiratory problems."
+  },
+  {
+    "toxin": "N’-nitrosonornicotine (NNN)",
+    "description": "Exposure to NNN through smoking is strongly associated with an increased risk of developing various cancers, particularly oral and esophageal cancers. Additionally, it can contribute to cardiovascular issues and respiratory problems."
+  },
+  {
+    "toxin": "Propionaldehyde",
+    "description": "Exposure to propionaldehyde through smoking is associated with an increased risk of respiratory issues, including chronic bronchitis and exacerbation of asthma symptoms. This chemical can also irritate the eyes and throat. Unfortunately it's not as extensively studied as some other tobacco smoke constituents."
+  },
+  {
+    "toxin": "Toluene",
+    "description": "Toluene is a volatile organic compound found in products like paints, solvents, and gasoline. Prolonged exposure to toluene through inhalation may cause neurological problems such as memory loss, headaches, and impaired coordination. Additionally, it can harm the respiratory system, causing lung irritation and damage over time."
+  },
+  {
+    "toxin": "Zinc",
+    "description": "Smoking can deplete zinc levels in the body as tobacco smoke contains compounds that inhibit zinc absorption. Zinc deficiency can lead to weakened immune function, impaired wound healing, and other health issues."
+  },
+  {
+    "toxin": "Total particulate matter (TPM)",
+    "description": "Total Particulate Matter (TPM) refers to the total mass of tiny solid or liquid particles suspended in the air. It includes both visible particles (like soot and dust) and invisible particles (like gases and organic compounds) that can be inhaled into the respiratory system. "
+  }
+]

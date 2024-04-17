@@ -1,0 +1,26 @@
+Toxic Compound Type,Toxic Compound,Concentration Range Cigarette (/Puff),Concentration Range E-Cigarette (/Puff)
+Carbonyls,Formaldehyde,<10 µg,<82 µg
+,Acetaldehyde,<140 µg,<53 µg
+,Acrolein,<14 µg,<3.3 µg
+,Propionaldehyde,<5.9 µg,<1.79 µg
+,Crotonaldehyde,<2 µg,<0.04 µg
+N-nitrosamines,N’-nitrosonornicotine (NNN),<370 ng,<0.029 ng
+,N’-nitrosoanabasine (NAB),<15 ng,<0.01 ng
+,4-(methylnitrosamino)-1-(3-pyridyl)-1-butanone (NNK),<77 ng,<0.019 ng
+,N’-nitrosoanatabine (NAT),<16 ng,<0.085 ng
+Volatile organic compounds (VOCs),Toluene,<6.9 µg,<1.53 µg
+,Benzene,<4.5 µg,<0.41 µg
+Inorganic compounds,Nickel,<60 ng,<6.4 ng
+,Cobalt,<0.02 ng,<0.58 ng
+,Chromium,<7 ng,<9 ng
+,Lead,<8.5 ng,<3.8 ng
+,Cadmium,<35 ng,-
+,Zinc,<1370 ng,<458 ng
+,Cuprum,<130 ng,<20.9 ng
+,Carbon monoxide (CO),<2.3 mg,-
+Polycyclic aromatic hydrocarbons and heterocyclic aromatic hydrocarbons (PAHs),Benz[a]anthracene,<7 ng,-
+,Benzo[b + k]fluoranthene,<3.4 ng,-
+,Benzo[a]pyrene,<4 ng,-
+,"Dibenzo[a, h]anthracene",<0.4 ng,-
+Nicotine,,<0.3 mg,<0.142 mg
+Particulate matter,Total particulate matter (TPM),<1.7 mg,<5.8 mg

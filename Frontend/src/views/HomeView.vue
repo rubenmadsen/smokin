@@ -40,7 +40,7 @@
 <script>
 import '../components/toxinsList.css'
 import axios from 'axios';
-
+ 
 const URL_FOR_LOCAL_HOST = "https://localhost:7197/"
 //const URL_FOR_LOCAL_HOST = "TODO"
 
@@ -58,7 +58,7 @@ export default {
       try {
         await new Promise(resolve => setTimeout(resolve, 1000));
         const response = await axios.get(URL_FOR_LOCAL_HOST + "api/TodoApp/GetToxinData");
-        this.toxins = Object.keys(response.data).map(key => response.data[key]);
+        this.toxins = Object.keys(response.data).map(key => response.data[key]).filter(value => value !== null)[0];
         console.log(this.toxins);
       } catch (error) {
         console.error('Error fetching data:', error);

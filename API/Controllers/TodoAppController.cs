@@ -2,6 +2,8 @@
 using System.Data;
 using Microsoft.Data.Sqlite;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace API.Controllers
@@ -18,6 +20,8 @@ namespace API.Controllers
             _configuration = configuration;
             _logger = logger;
         }
+
+        
 
         [SwaggerOperation(Summary = "Returns data on toxins derived from smoking.")]
         [HttpGet]
@@ -106,5 +110,71 @@ namespace API.Controllers
             // Implementation will calculate and return the amount of toxins a user has consumed based on their input. 
             throw new NotImplementedException("Endpoint not implemented yet");
         }
+
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private float ConvertAmount(String amount)
+        {
+            float g = 1.0f;
+            if (amount.Contains("µg"))
+                g = 0.0f;
+            else if(amount.Contains("ng"))
+                g = 0.0f;
+            else if (amount.Contains("mg"))
+                g = 0.0f;
+
+            return 0.0f;
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private void ClearTable(String tableName)
+        {
+            string sqlDatasource = _configuration.GetConnectionString("DBcon");
+            using (var connection = new SqliteConnection(sqlDatasource))
+            {
+                connection.Open();
+
+                string sql = $"DROP TABLE IF EXISTS {tableName};";
+
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+                    Console.WriteLine($"Table {tableName} has been dropped.");
+                }
+                
+
+            }
+        }
+
+
+        [SwaggerOperation(Summary = "Clear the tables and regenerate and populate them.")]
+        [HttpGet]
+        [Route("GenerateDatabase")]
+        public IActionResult GenerateDatabase()
+        {
+            this.ClearTable("Descriptions");
+            this.ClearTable("Categories");
+            this.ClearTable("Substances");
+            /*
+            string sqlDatasource = _configuration.GetConnectionString("DBcon");
+            using (var connection = new SqliteConnection(sqlDatasource))
+            {
+                connection.Open();
+
+                string tableName = "Categories";
+                string sql = $"DROP TABLE IF EXISTS {tableName};";
+
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+
+                
+            }
+            */
+            return StatusCode(200, "All good in the hood.");
+
+        }
+
     }
 }

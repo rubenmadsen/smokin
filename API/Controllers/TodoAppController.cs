@@ -4,6 +4,7 @@ using Microsoft.Data.Sqlite;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Diagnostics;
 
 
 namespace API.Controllers
@@ -113,15 +114,15 @@ namespace API.Controllers
 
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        private float ConvertAmount(String amount)
+        private float ConvertToGrams(String amount)
         {
             float g = 1.0f;
-            if (amount.Contains("µg"))
-                g = 0.0f;
-            else if(amount.Contains("ng"))
-                g = 0.0f;
-            else if (amount.Contains("mg"))
-                g = 0.0f;
+            if (amount.Contains("mg"))
+                g *= 1000.0f;
+            else if(amount.Contains("µg"))
+                g *= 1000.0f;
+            else if (amount.Contains("ng"))
+                g *= 1000.0f;
 
             return 0.0f;
         }
@@ -142,38 +143,78 @@ namespace API.Controllers
                     Console.WriteLine($"Table {tableName} has been dropped.");
                 }
                 
+            }
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private void ParseCSVData(String filePath)
+        {
+            using (var reader = new StreamReader(filePath))
+            {
+                string headerLine = reader.ReadLine();
+                string line;
+
+                String lastCategory = "";
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var values = line.Split(',');
+
+                    if (!values[0].Equals(""))
+                        lastCategory = values[0]; 
+                    string substance = values[1];
+                    string cigPerPuff = values[2];
+                    string eCigPerPuff = values[3];
+
+                    Debug.WriteLine($"{lastCategory}, {substance}, {cigPerPuff}, {eCigPerPuff}");
+                
+                }
 
             }
         }
-
 
         [SwaggerOperation(Summary = "Clear the tables and regenerate and populate them.")]
         [HttpGet]
         [Route("GenerateDatabase")]
         public IActionResult GenerateDatabase()
         {
-            this.ClearTable("Descriptions");
             this.ClearTable("Categories");
             this.ClearTable("Substances");
-            /*
             string sqlDatasource = _configuration.GetConnectionString("DBcon");
             using (var connection = new SqliteConnection(sqlDatasource))
             {
                 connection.Open();
 
-                string tableName = "Categories";
-                string sql = $"DROP TABLE IF EXISTS {tableName};";
+                // Create table "Categories"
+                string createCategoriesTableQuery = @"
+                    CREATE TABLE IF NOT EXISTS Categories (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Name TEXT NOT NULL,
+                        Description TEXT
+                    );";
 
-                using (var command = new SqliteCommand(sql, connection))
+                using (var command = new SqliteCommand(createCategoriesTableQuery, connection))
                 {
                     command.ExecuteNonQuery();
+                    Console.WriteLine("Table 'Categories' created successfully.");
                 }
 
-                
+                // Create table Substances
+                string createSubstancesTableQuery = @"
+                    CREATE TABLE IF NOT EXISTS Substances (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        CategoryId INTEGER NOT NULL,
+                        Name TEXT NOT NULL,
+                        Description TEXT,
+                        FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
+                    );";
+                using (var command = new SqliteCommand(createSubstancesTableQuery, connection))
+                {
+                    command.ExecuteNonQuery();
+                    Console.WriteLine("Table 'Categories' created successfully.");
+                }
             }
-            */
-            return StatusCode(200, "All good in the hood.");
 
+            this.ParseCSVData("../Data/toxins.csv");
+            return StatusCode(200, "All good in the hood.");
         }
 
     }

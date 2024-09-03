@@ -8,10 +8,21 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-
+using System;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace API.Controllers
 {
+    public class Toxin
+    {
+        [JsonPropertyName("toxin")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+    }
     [Route("api/[controller]")]
     [ApiController]
     public class TodoAppController : ControllerBase
@@ -127,11 +138,11 @@ namespace API.Controllers
             float.TryParse(num, out float value);
 
                 if (unit.Contains("mg"))
-                value /= 1000.0f; // Convert milligrams to grams
+                value /= 1000.0f; 
             else if (unit.Contains("µg"))
-                value /= 1000000.0f; // Convert micrograms to grams
+                value /= 1000000.0f; 
             else if (unit.Contains("ng"))
-                value /= 1000000000.0f; // Convert nanograms to grams
+                value /= 1000000000.0f;
 
             return value;
         }
@@ -157,18 +168,19 @@ namespace API.Controllers
             }
         }
         [ApiExplorerSettings(IgnoreApi = true)]
-        private int AddToxin(String toxinName, int category)
+        private int AddToxin(String toxinName, String description, int category)
         {
 
             string sqlDatasource = _configuration.GetConnectionString("DBcon");
             using (var connection = new SqliteConnection(sqlDatasource))
             {
                 connection.Open();
-                string insertToxinQuery = "INSERT INTO Toxins (CategoryId, Name) VALUES (@CategoryId, @Name)";
+                string insertToxinQuery = "INSERT INTO Toxins (CategoryId, Name, Description) VALUES (@CategoryId, @Name, @Description)";
                 using (var insertToxinCommand = new SqliteCommand(insertToxinQuery, connection))
                 {
                     insertToxinCommand.Parameters.AddWithValue("@CategoryId", category);
                     insertToxinCommand.Parameters.AddWithValue("@Name", toxinName);
+                    insertToxinCommand.Parameters.AddWithValue("@Description", description);
                     insertToxinCommand.ExecuteNonQuery();
                     Console.WriteLine($"Toxin '{toxinName}' added under CategoryId {category}.");
                 }
@@ -213,6 +225,15 @@ namespace API.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         private void ParseCSVToxins(String filePath)
         {
+            String jsonPath = "../Data/toxin_descriptions.json";
+            String jsonString;
+            List<Toxin> toxins = new List<Toxin>();
+            using (StreamReader r = new StreamReader(jsonPath))
+            {
+                jsonString = r.ReadToEnd();
+                toxins = JsonSerializer.Deserialize<List<Toxin>>(jsonString);
+            }
+
             using (var reader = new StreamReader(filePath))
             {
                 string headerLine = reader.ReadLine();
@@ -229,14 +250,18 @@ namespace API.Controllers
                         string category = values[0];
                         string toxin = values[1];
 
-
                         if (!values[0].Equals(""))
                             curCategoryId = this.AddCategory(category);
 
                         if (toxin.Equals(""))
                             toxin = category;
-
-                        this.AddToxin(toxin, curCategoryId);
+                        Toxin tox = toxins.FirstOrDefault(t => t.Name.Equals(toxin));
+                        String desc = "None";
+                        if (tox != null)
+                            desc = tox.Description;
+                        else
+                            Debug.WriteLine($"Could not find a match for {toxin}");
+                        this.AddToxin(toxin, desc,  curCategoryId);
                        
                     }
                 }
@@ -282,9 +307,20 @@ namespace API.Controllers
         [Route("GenerateDatabase")]
         public IActionResult GenerateDatabase()
         {
+            string deleteAllToxinsQuery = "DELETE FROM Toxins";
+
+            string sqlDatasource = _configuration.GetConnectionString("DBcon");
+            using (var connection = new SqliteConnection(sqlDatasource))
+            {
+                connection.Open();
+                using (var deleteCommand = new SqliteCommand(deleteAllToxinsQuery, connection))
+                {
+                    int rowsAffected = deleteCommand.ExecuteNonQuery();
+                    Console.WriteLine($"{rowsAffected} rows deleted from the Toxins table.");
+                }
+            }
             this.ClearTable("Categories");
             this.ClearTable("Toxins");
-            string sqlDatasource = _configuration.GetConnectionString("DBcon");
             using (var connection = new SqliteConnection(sqlDatasource))
             {
                 connection.Open();

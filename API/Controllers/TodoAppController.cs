@@ -114,18 +114,27 @@ namespace API.Controllers
 
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        private float ConvertToGrams(String amount)
+        private float ConvertToGrams(string amount)
         {
-            float g = 1.0f;
-            if (amount.Contains("mg"))
-                g *= 1000.0f;
-            else if(amount.Contains("µg"))
-                g *= 1000.0f;
-            else if (amount.Contains("ng"))
-                g *= 1000.0f;
+            float val = 1.0f;
 
-            return 0.0f;
+            string numberPart = new string(amount.TakeWhile(c => char.IsDigit(c) || c == '.').ToArray());
+
+            if (!float.TryParse(numberPart, out val))
+            {
+                throw new ArgumentException("Invalid numeric value in amount");
+            }
+
+            if (amount.Contains("mg"))
+                val /= 1000.0f;
+            else if (amount.Contains("µg"))
+                val /= 1000000.0f;
+            else if (amount.Contains("ng"))
+                val /= 1000000000.0f;
+
+            return val;
         }
+
 
         [ApiExplorerSettings(IgnoreApi = true)]
         private void ClearTable(String tableName)

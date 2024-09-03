@@ -22,13 +22,12 @@ namespace API.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<TodoAppController> _logger;
-        private DatabaseGenerator databaseManager;
 
         public TodoAppController(IConfiguration configuration, ILogger<TodoAppController> logger)
         {
             _configuration = configuration;
             _logger = logger;
-            this.databaseManager = new DatabaseGenerator(_configuration.GetConnectionString("DBcon"));
+           
         }
 
         
@@ -127,7 +126,8 @@ namespace API.Controllers
         [Route("GenerateDatabase")]
         public IActionResult GenerateDatabase()
         {
-            int result = this.databaseManager.GenerateDatabase();
+            DatabaseGenerator databaseGenerator = new DatabaseGenerator(_configuration.GetConnectionString("DBcon"));
+            int result = databaseGenerator.GenerateDatabase();
             if (result == 0)
                 return StatusCode(200, "All good in the hood.");
             else

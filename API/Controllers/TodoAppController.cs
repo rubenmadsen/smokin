@@ -5,6 +5,9 @@ using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Globalization;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
 namespace API.Controllers
@@ -116,24 +119,23 @@ namespace API.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         private float ConvertToGrams(string amount)
         {
-            float val = 1.0f;
+            string[] parts = amount.Split(" ");
+            string unit = parts[1];
+            string num = parts[0];
+            if (num.StartsWith("<"))
+                num = num.Substring(1);
+            float.TryParse(num, out float value);
 
-            string numberPart = new string(amount.TakeWhile(c => char.IsDigit(c) || c == '.').ToArray());
+                if (unit.Contains("mg"))
+                value /= 1000.0f; // Convert milligrams to grams
+            else if (unit.Contains("µg"))
+                value /= 1000000.0f; // Convert micrograms to grams
+            else if (unit.Contains("ng"))
+                value /= 1000000000.0f; // Convert nanograms to grams
 
-            if (!float.TryParse(numberPart, out val))
-            {
-                throw new ArgumentException("Invalid numeric value in amount");
-            }
-
-            if (amount.Contains("mg"))
-                val /= 1000.0f;
-            else if (amount.Contains("µg"))
-                val /= 1000000.0f;
-            else if (amount.Contains("ng"))
-                val /= 1000000000.0f;
-
-            return val;
+            return value;
         }
+
 
 
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -155,7 +157,96 @@ namespace API.Controllers
             }
         }
         [ApiExplorerSettings(IgnoreApi = true)]
-        private void ParseCSVData(String filePath)
+        private int AddToxin(String toxinName, int category)
+        {
+
+            string sqlDatasource = _configuration.GetConnectionString("DBcon");
+            using (var connection = new SqliteConnection(sqlDatasource))
+            {
+                connection.Open();
+                string insertToxinQuery = "INSERT INTO Toxins (CategoryId, Name) VALUES (@CategoryId, @Name)";
+                using (var insertToxinCommand = new SqliteCommand(insertToxinQuery, connection))
+                {
+                    insertToxinCommand.Parameters.AddWithValue("@CategoryId", category);
+                    insertToxinCommand.Parameters.AddWithValue("@Name", toxinName);
+                    insertToxinCommand.ExecuteNonQuery();
+                    Console.WriteLine($"Toxin '{toxinName}' added under CategoryId {category}.");
+                }
+            }
+                return 0;
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private int AddCategory(String categoryName)
+        {
+            int id = -1;
+            string sqlDatasource = _configuration.GetConnectionString("DBcon");
+            using (var connection = new SqliteConnection(sqlDatasource))
+            {
+                connection.Open();
+                string getCategoryQuery = "SELECT Id FROM Categories WHERE Name = @Name";
+                using (var getCategoryCommand = new SqliteCommand(getCategoryQuery, connection))
+                {
+                    getCategoryCommand.Parameters.AddWithValue("@Name", categoryName);
+                    var result = getCategoryCommand.ExecuteScalar();
+
+                    if (result == null)
+                    {
+                        // Step 2: If the category does not exist, insert it
+                        string insertCategoryQuery = "INSERT INTO Categories (Name) VALUES (@Name); SELECT last_insert_rowid();";
+                        using (var insertCategoryCommand = new SqliteCommand(insertCategoryQuery, connection))
+                        {
+                            insertCategoryCommand.Parameters.AddWithValue("@Name", categoryName);
+                            id = Convert.ToInt32(insertCategoryCommand.ExecuteScalar());
+                            Console.WriteLine($"Category '{categoryName}' inserted with Id {id}.");
+                        }
+                    }
+                    else
+                    {
+                        // The category exists, get the Id
+                        id = Convert.ToInt32(result);
+                        Console.WriteLine($"Category '{categoryName}' already exists with Id {id}.");
+                    }
+                }
+            }
+            return id;
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private void ParseCSVToxins(String filePath)
+        {
+            using (var reader = new StreamReader(filePath))
+            {
+                string headerLine = reader.ReadLine();
+                string line;
+
+                int curCategoryId = -1;
+                string sqlDatasource = _configuration.GetConnectionString("DBcon");
+                using (var connection = new SqliteConnection(sqlDatasource))
+                {
+                    connection.Open();
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        var values = line.Split(',');
+                        string category = values[0];
+                        string toxin = values[1];
+
+
+                        if (!values[0].Equals(""))
+                            curCategoryId = this.AddCategory(category);
+
+                        if (toxin.Equals(""))
+                            toxin = category;
+
+                        this.AddToxin(toxin, curCategoryId);
+                       
+                    }
+                }
+
+            }
+        }
+
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private void ParseCSVConsumables(String filePath)
         {
             using (var reader = new StreamReader(filePath))
             {
@@ -166,15 +257,21 @@ namespace API.Controllers
                 while ((line = reader.ReadLine()) != null)
                 {
                     var values = line.Split(',');
-
+                    string substance;
+                    float cigPerPuff;
+                    float eCigPerPuff;
+                    Debug.WriteLine(line);
                     if (!values[0].Equals(""))
-                        lastCategory = values[0]; 
-                    string substance = values[1];
-                    string cigPerPuff = values[2];
-                    string eCigPerPuff = values[3];
+                        lastCategory = values[0];
+                    if (!values[1].Equals(""))
+                        substance = lastCategory;
+                    else
+                        substance = values[1];
+                    cigPerPuff = ConvertToGrams(values[2]);
+                    eCigPerPuff = ConvertToGrams(values[3]);
 
                     Debug.WriteLine($"{lastCategory}, {substance}, {cigPerPuff}, {eCigPerPuff}");
-                
+
                 }
 
             }
@@ -186,7 +283,7 @@ namespace API.Controllers
         public IActionResult GenerateDatabase()
         {
             this.ClearTable("Categories");
-            this.ClearTable("Substances");
+            this.ClearTable("Toxins");
             string sqlDatasource = _configuration.GetConnectionString("DBcon");
             using (var connection = new SqliteConnection(sqlDatasource))
             {
@@ -196,8 +293,7 @@ namespace API.Controllers
                 string createCategoriesTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Categories (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Name TEXT NOT NULL,
-                        Description TEXT
+                        Name TEXT NOT NULL
                     );";
 
                 using (var command = new SqliteCommand(createCategoriesTableQuery, connection))
@@ -207,22 +303,23 @@ namespace API.Controllers
                 }
 
                 // Create table Substances
-                string createSubstancesTableQuery = @"
-                    CREATE TABLE IF NOT EXISTS Substances (
+                string createToxinsTableQuery = @"
+                    CREATE TABLE IF NOT EXISTS Toxins (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
                         CategoryId INTEGER NOT NULL,
                         Name TEXT NOT NULL,
                         Description TEXT,
                         FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
                     );";
-                using (var command = new SqliteCommand(createSubstancesTableQuery, connection))
+                using (var command = new SqliteCommand(createToxinsTableQuery, connection))
                 {
                     command.ExecuteNonQuery();
                     Console.WriteLine("Table 'Categories' created successfully.");
                 }
             }
 
-            this.ParseCSVData("../Data/toxins.csv");
+            this.ParseCSVToxins("../Data/toxins.csv");
+            //this.ParseCSVConsumables("../Data/toxins.csv");
             return StatusCode(200, "All good in the hood.");
         }
 

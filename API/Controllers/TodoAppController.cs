@@ -39,7 +39,7 @@ namespace API.Controllers
         {
             try
             {
-                string query = "select * from toxins";
+                string query = "select * from Toxins";
                 DataTable table = new DataTable();
                 string sqlDatasource = _configuration.GetConnectionString("DBcon");
 

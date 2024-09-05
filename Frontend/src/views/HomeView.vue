@@ -1,49 +1,49 @@
 <template>
-<div class="home-container">
-  <h1 class="page-title">Home Page</h1>
-  
-  <p class="page-description">
-    This page serves as the home page. Assuming the backend has been correctly implemented and successfully connected, it should present the toxins data within a table format.
-  </p>
+  <div class="home-container">
+    <h1 class="page-title">Home Page</h1>
 
-  <div v-if="toxins.length > 0" class="toxins-table-container">
-    <table class="toxins-table">
-      <thead>
-        <tr>
-          <th>Compound</th>
-          <th>Tobacco Concentration</th>
-          <th>Electronic Concentration</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(toxin, index) in toxins" :key="index">
-          <td>{{ toxin.Compound }}</td>
-          <td>{{ toxin.Tobacco }}</td>
-          <td>{{ toxin.Electronic }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <p class="page-description">
+      This page serves as the home page. Assuming the backend has been correctly implemented and successfully connected, it should present the toxins data within a table format.
+    </p>
 
-  <div v-else-if="fetchError" class="error-message">
-    Failed to fetch toxins data.
-    <button @click="reloadData" class="reload-button">Reload Data</button>
-  </div>
+    <div v-if="toxins.length > 0" class="toxins-table-container">
+      <table class="toxins-table">
+        <thead>
+          <tr>
+            <th>Compound</th>
+            <th>Tobacco Concentration</th>
+            <th>Electronic Concentration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(toxin, index) in toxins" :key="index">
+            <td>{{ toxin.Compound }}</td>
+            <td>{{ toxin.Tobacco }}</td>
+            <td>{{ toxin.Electronic }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <div v-else class="loading-message">
-    Loading toxins data...
+    <div v-else-if="fetchError" class="error-message">
+      Failed to fetch toxins data.
+      <button @click="reloadData" class="reload-button">Reload Data</button>
+    </div>
+
+    <div v-else class="loading-message">
+      Loading toxins data...
+    </div>
+    <TestComponent></TestComponent>
+    <!-- Add the Test component here -->
+    <Test />
   </div>
-</div>
 </template>
 
-
 <script>
-import '../components/toxinsList.css'
+import TestComponent from '@/components/TestComponent.vue';
 import axios from 'axios';
- 
-const URL_FOR_LOCAL_HOST = "https://localhost:7197/"
-//const URL_FOR_LOCAL_HOST = "TODO"
 
+const URL_FOR_LOCAL_HOST = "https://localhost:7197/";
 
 export default {
   name: 'HomeView',
@@ -52,6 +52,9 @@ export default {
       toxins: [],
       fetchError: false,
     }
+  },
+  components: {
+    TestComponent, // Register the Test component
   },
   methods: {
     async getData() {
@@ -71,15 +74,13 @@ export default {
     }
   },
 
-  mounted:function(){
-        this.getData()
-      }
+  mounted: function() {
+    this.getData();
+  }
 }
-
 </script>
 
 <style>
-
 .reload-button {
   background-color: #4CAF50;
   border: none;

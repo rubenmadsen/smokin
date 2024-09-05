@@ -1,5 +1,10 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using CsvHelper;
+using Microsoft.Data.Sqlite;
+using System.Globalization;
 using System.Text.Json.Serialization;
+using System.Data.SQLite;
+using API.Models;
+using Newtonsoft.Json;
 
 namespace API.Manager
 {
@@ -31,7 +36,7 @@ namespace API.Manager
                 string createCategoriesTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Categories (
                         
-                        categoryName TEXT PRIMARY KEY
+                        categoryName TEXT 
                     );";
 
                 using (var command = new SqliteCommand(createCategoriesTableQuery, connection))
@@ -44,8 +49,8 @@ namespace API.Manager
                 string createToxinsTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Toxins (
                         toxinName TEXT PRIMARY KEY,
-                        categoryName TEXT REFERENCES Categories,
-                        description TEXT NOT NULL
+                        categoryName TEXT REFERENCES Categories(categoryName),
+                        description TEXT 
                         
                     );";
                 using (var command = new SqliteCommand(createToxinsTableQuery, connection))
@@ -70,15 +75,163 @@ namespace API.Manager
                 }
             }
 
-            //ParseCSVToxins();
+            ParseCSVToxins();
+            ParseJSONToxins();
+            
             return 0;
         }
 
+        public class ToxinJsonModel
+        {
+            public string Toxin { get; set; }
+            public string Description { get; set; }
+        }
 
-      
+       
 
 
-private void AddConsumable(string toxinName, string nameConsumable, float amount)
+
+        public void ParseJSONToxins()
+        {
+            string filePathJSON = "../Data/toxin_descriptions.json";
+
+            if (!File.Exists(filePathJSON))
+            {
+                Console.WriteLine("JSON file not found.");
+                return;
+            }
+
+            try
+            {
+                using (var connection = new SQLiteConnection(sqlDatasource))
+                {
+                    connection.Open();
+
+                    // Read JSON file
+                    var jsonData = File.ReadAllText(filePathJSON);
+                    var toxinList = JsonConvert.DeserializeObject<List<ToxinJsonModel>>(jsonData);
+
+                    // Update each toxin's description in the database
+                    foreach (var toxin in toxinList)
+                    {
+                        string updateQuery = "UPDATE Toxins SET description = @description WHERE toxinName = @toxinName OR categoryName = @toxinName ";
+
+                        Console.WriteLine($"Executing SQL: {updateQuery}");
+                        Console.WriteLine($"Parameters: toxinName={toxin.Toxin}, description={toxin.Description}");
+
+                        using (var command = new SQLiteCommand(updateQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@toxinName", toxin.Toxin);
+                            command.Parameters.AddWithValue("@description", toxin.Description);
+
+                            int rowsAffected = command.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                Console.WriteLine($"Updated description for toxin: {toxin.Toxin}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"No matching toxin found for: {toxin.Toxin}");
+                            }
+                        }
+                    }
+
+                    connection.Close(); // Optional, as the using statement will take care of it
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        private void ParseCSVToxins()
+        {
+            string filePathCSV = "../Data/toxins.csv";
+
+            if (!File.Exists(filePathCSV))
+            {
+                Console.WriteLine("CSV file not found.");
+                return;
+            }
+
+            try
+            {
+                using (var connection = new SQLiteConnection(sqlDatasource))
+                {
+                    connection.Open();
+
+                    using (var reader = new StreamReader(filePathCSV))
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+                        // Read the header first
+                        csv.Read();
+                        csv.ReadHeader();
+
+                        var toxinRecords = new List<Toxin>();
+                        var lastCategory = new Category();
+
+                        while (csv.Read())
+                        {
+                            var toxinName = csv.GetField<string>("Toxic Compound");
+                            var categoryName = csv.GetField<string>("Toxic Compound Type");
+
+                            // Use the last non-empty category if the current one is empty
+                            if (string.IsNullOrWhiteSpace(categoryName))
+                            {
+                                categoryName = lastCategory.Name;
+                            }
+                            else
+                            {
+                                lastCategory = new Category { Name = categoryName };
+                            }
+
+                            // Create a new Toxin object
+                            var toxin = new Toxin
+                            {
+                                Name = toxinName,
+                                Category = lastCategory
+                            };
+
+                            toxinRecords.Add(toxin);
+                        }
+
+                        // Insert records into the database
+                        foreach (var toxin in toxinRecords)
+                        {
+                            string insertQuery = "INSERT INTO Toxins (toxinName, categoryName) VALUES (@toxinName, @categoryName)";
+
+                            Console.WriteLine($"Executing SQL: {insertQuery}");
+                            Console.WriteLine($"Parameters: toxinName={toxin.Name}, categoryName={toxin.Category.Name}");
+
+                            using (var command = new SQLiteCommand(insertQuery, connection))
+                            {
+                                command.Parameters.AddWithValue("@toxinName", toxin.Name);
+                                command.Parameters.AddWithValue("@categoryName", toxin.Category.Name);
+
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                        // Verify the insertion
+                        string selectQuery = "SELECT COUNT(*) FROM Toxins";
+                        using (var selectCommand = new SQLiteCommand(selectQuery, connection))
+                        {
+                            var count = selectCommand.ExecuteScalar();
+                            Console.WriteLine($"Number of rows in Toxins table: {count}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+
+        private void AddConsumable(string toxinName, string nameConsumable, float amount)
         {
             using (var connection = new SqliteConnection(sqlDatasource))
             {

@@ -73,7 +73,7 @@ namespace API.Manager
                     Console.WriteLine("Table 'Categories' created successfully.");
                 }
 
-                // Create table Substances
+                // Create table Toxins
                 string createToxinsTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Toxins (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,

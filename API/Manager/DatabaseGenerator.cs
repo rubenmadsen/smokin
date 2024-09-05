@@ -3,17 +3,10 @@ using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
+using API.Models;
 namespace API.Manager
 {
-    public class Toxin
-    {
-        [JsonPropertyName("toxin")]
-        public string Name { get; set; }
-
-        [JsonPropertyName("description")]
-        public string Description { get; set; }
-    }
+   
     public class DatabaseGenerator
     {
         private readonly string sqlDatasource;
@@ -146,10 +139,8 @@ namespace API.Manager
                         else
                             Debug.WriteLine($"Could not find a match for {toxin}");
                         this.AddToxin(toxin, desc, curCategoryId);
-
                     }
                 }
-
             }
         }
         private void ParseCSVConsumables(String filePath)

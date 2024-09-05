@@ -1,22 +1,9 @@
-﻿using CsvHelper;
-using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using System.Diagnostics;
-using System.Reflection.PortableExecutable;
-using System.Text.Json;
+﻿using Microsoft.Data.Sqlite;
 using System.Text.Json.Serialization;
 
 namespace API.Manager
 {
-    public class Toxin
-    {
-        [JsonPropertyName("toxin")]
-        public string Name { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description { get; set; }
-    }
     public class DatabaseGenerator
     {
         private readonly string sqlDatasource;

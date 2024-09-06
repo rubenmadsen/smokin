@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using API.Models;
 using Newtonsoft.Json;
 
+
 namespace API.Manager
 {
 
@@ -28,11 +29,11 @@ namespace API.Manager
  
             using (var connection = new SqliteConnection(sqlDatasource))
             {
-                connection.Open();
+                connection.Open(); //kolla om den behövs
 
 
 
-                // Create table "Categories"
+                // Create table "Categories"  Ändra till två scheman, en för csv en för json
                 string createCategoriesTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Categories (
                         
@@ -81,14 +82,6 @@ namespace API.Manager
             return 0;
         }
 
-        public class ToxinJsonModel : BaseModel
-        {
-            public string Toxin { get; set; }
-
-         
-            public string Description { get; set; }
-        }
-
        
 
 
@@ -110,7 +103,7 @@ namespace API.Manager
                     connection.Open();
 
                     var jsonData = File.ReadAllText(filePathJSON);
-                    var toxinList = JsonConvert.DeserializeObject<List<ToxinJsonModel>>(jsonData);
+                    var toxinList = JsonConvert.DeserializeObject<List<Toxin>>(jsonData);
 
                     
                     foreach (var toxin in toxinList)
@@ -118,11 +111,11 @@ namespace API.Manager
                         string updateQuery = "UPDATE Toxins SET description = @description WHERE toxinName = @toxinName OR categoryName = @toxinName ";
 
                         Console.WriteLine($"Executing SQL: {updateQuery}");
-                        Console.WriteLine($"Parameters: toxinName={toxin.Toxin}, description={toxin.Description}");
+                        Console.WriteLine($"Parameters: toxinName={toxin.toxin}, description={toxin.Description}");
 
                         using (var command = new SQLiteCommand(updateQuery, connection))
                         {
-                            command.Parameters.AddWithValue("@toxinName", toxin.Toxin);
+                            command.Parameters.AddWithValue("@toxinName", toxin.toxin);
                             command.Parameters.AddWithValue("@description", toxin.Description);
                             
                             command.ExecuteNonQuery();
@@ -184,7 +177,7 @@ namespace API.Manager
                             // Create a new Toxin object
                             var toxin = new Toxin
                             {
-                                Name = toxinName,
+                                toxin = toxinName,
                                 Category = lastCategory
                             };
 
@@ -197,11 +190,11 @@ namespace API.Manager
                             string insertQuery = "INSERT INTO Toxins (toxinName, categoryName) VALUES (@toxinName, @categoryName)";
 
                             Console.WriteLine($"Executing SQL: {insertQuery}");
-                            Console.WriteLine($"Parameters: toxinName={toxin.Name}, categoryName={toxin.Category.Name}");
+                            Console.WriteLine($"Parameters: toxinName={toxin.toxin}, categoryName={toxin.Category.Name}");
 
                             using (var command = new SQLiteCommand(insertQuery, connection))
                             {
-                                command.Parameters.AddWithValue("@toxinName", toxin.Name);
+                                command.Parameters.AddWithValue("@toxinName", toxin.toxin);
                                 command.Parameters.AddWithValue("@categoryName", toxin.Category.Name);
 
                                 command.ExecuteNonQuery();

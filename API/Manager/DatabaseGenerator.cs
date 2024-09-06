@@ -81,9 +81,11 @@ namespace API.Manager
             return 0;
         }
 
-        public class ToxinJsonModel
+        public class ToxinJsonModel : BaseModel
         {
             public string Toxin { get; set; }
+
+         
             public string Description { get; set; }
         }
 
@@ -107,11 +109,10 @@ namespace API.Manager
                 {
                     connection.Open();
 
-                    // Read JSON file
                     var jsonData = File.ReadAllText(filePathJSON);
                     var toxinList = JsonConvert.DeserializeObject<List<ToxinJsonModel>>(jsonData);
 
-                    // Update each toxin's description in the database
+                    
                     foreach (var toxin in toxinList)
                     {
                         string updateQuery = "UPDATE Toxins SET description = @description WHERE toxinName = @toxinName OR categoryName = @toxinName ";
@@ -123,26 +124,19 @@ namespace API.Manager
                         {
                             command.Parameters.AddWithValue("@toxinName", toxin.Toxin);
                             command.Parameters.AddWithValue("@description", toxin.Description);
+                            
+                            command.ExecuteNonQuery();
 
-                            int rowsAffected = command.ExecuteNonQuery();
-
-                            if (rowsAffected > 0)
-                            {
-                                Console.WriteLine($"Updated description for toxin: {toxin.Toxin}");
-                            }
-                            else
-                            {
-                                Console.WriteLine($"No matching toxin found for: {toxin.Toxin}");
-                            }
+                          
                         }
                     }
 
-                    connection.Close(); // Optional, as the using statement will take care of it
+                    connection.Close(); 
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                Console.WriteLine("Något blev fel :(");
             }
         }
 
@@ -165,7 +159,7 @@ namespace API.Manager
                     using (var reader = new StreamReader(filePathCSV))
                     using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                     {
-                        // Read the header first
+                        
                         csv.Read();
                         csv.ReadHeader();
 

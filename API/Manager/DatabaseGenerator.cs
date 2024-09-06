@@ -2,13 +2,14 @@
 using Microsoft.Data.Sqlite;
 using System.Globalization;
 using System.Text.Json.Serialization;
+
 using System.Data.SQLite;
 using API.Models;
 using Newtonsoft.Json;
 
 
-namespace API.Manager
-{
+
+   
 
     public class DatabaseGenerator
     {
@@ -108,6 +109,7 @@ namespace API.Manager
                     
                     foreach (var toxin in toxinList)
                     {
+
                         string updateQuery = "UPDATE Toxins SET description = @description WHERE toxinName = @toxinName OR categoryName = @toxinName ";
 
                         Console.WriteLine($"Executing SQL: {updateQuery}");
@@ -130,6 +132,10 @@ namespace API.Manager
             catch (Exception ex)
             {
                 Console.WriteLine("Något blev fel :(");
+
+                    }
+                }
+
             }
         }
 

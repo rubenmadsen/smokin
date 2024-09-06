@@ -1,12 +1,16 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration;
-using System.Diagnostics;
-using System.Text.Json;
+﻿using CsvHelper;
+using Microsoft.Data.Sqlite;
+using System.Globalization;
 using System.Text.Json.Serialization;
+
+using System.Data.SQLite;
 using API.Models;
-namespace API.Manager
-{
+using Newtonsoft.Json;
+
+
+
    
+
     public class DatabaseGenerator
     {
         private readonly string sqlDatasource;
@@ -15,49 +19,26 @@ namespace API.Manager
             this.sqlDatasource = sqlDatasource;
         }
 
-        private void ClearTable(string sqlDatasource, string tableName)
-        {
-            using (var connection = new SqliteConnection(sqlDatasource))
-            {
-                connection.Open();
 
-                string sql = $"DROP TABLE IF EXISTS {tableName};";
 
-                using (var command = new SqliteCommand(sql, connection))
-                {
-                    command.ExecuteNonQuery();
-                    Console.WriteLine($"Table {tableName} has been dropped.");
-                }
-
-            }
-        }
+      
 
         public int GenerateDatabase()
         {
-            this.ClearTable(sqlDatasource, "Toxins");
-            string deleteAllToxinsQuery = "DELETE FROM Toxins";
+           
             
-            //using (var connection = new SqliteConnection(this.sqlDatasource))
-            //{
-            //    connection.Open();
-            //    using (var deleteCommand = new SqliteCommand(deleteAllToxinsQuery, connection))
-            //    {
-            //        int rowsAffected = deleteCommand.ExecuteNonQuery();
-            //        Console.WriteLine($"{rowsAffected} rows deleted from the Toxins table.");
-            //    }
-            //}
-            this.ClearTable(sqlDatasource, "Categories");
-            
-            this.ClearTable(sqlDatasource, "Consumables");
+ 
             using (var connection = new SqliteConnection(sqlDatasource))
             {
-                connection.Open();
+                connection.Open(); //kolla om den behövs
 
-                // Create table "Categories"
+
+
+                // Create table "Categories"  Ändra till två scheman, en för csv en för json
                 string createCategoriesTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Categories (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Name TEXT NOT NULL
+                        
+                        categoryName TEXT 
                     );";
 
                 using (var command = new SqliteCommand(createCategoriesTableQuery, connection))
@@ -69,26 +50,25 @@ namespace API.Manager
                 // Create table Toxins
                 string createToxinsTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Toxins (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        CategoryId INTEGER NOT NULL,
-                        Name TEXT NOT NULL,
-                        Description TEXT,
-                        FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
+                        toxinName TEXT PRIMARY KEY,
+                        categoryName TEXT REFERENCES Categories(categoryName),
+                        description TEXT 
+                        
                     );";
                 using (var command = new SqliteCommand(createToxinsTableQuery, connection))
                 {
                     command.ExecuteNonQuery();
-                    Console.WriteLine("Table 'Categories' created successfully.");
+                    Console.WriteLine("Table 'Toxins' created successfully.");
                 }
 
                 // Create table Consumables
                 string createConsumablesTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Consumables (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        ToxinId INTEGER NOT NULL,
-                        Name TEXT NOT NULL,
-                        Amount REAL,
-                        FOREIGN KEY (ToxinId) REFERENCES Toxins(Id)
+                        
+                       toxinName TEXT PRIMARY KEY REFERENCES Toxins, 
+                        nameConsumable TEXT NOT NULL,
+                        amount REAL
+                        
                     );";
                 using (var command = new SqliteCommand(createConsumablesTableQuery, connection))
                 {
@@ -97,133 +77,207 @@ namespace API.Manager
                 }
             }
 
-            this.ParseCSVToxins("../Data/toxins.csv");
-            this.ParseCSVConsumables("../Data/toxins.csv");
+            ParseCSVToxins();
+            ParseJSONToxins();
+            
             return 0;
         }
-        private void ParseCSVToxins(String filePath)
+
+       
+
+
+
+        public void ParseJSONToxins()
         {
-            String jsonPath = "../Data/toxin_descriptions.json";
-            String jsonString;
-            List<Toxin> toxins = new List<Toxin>();
-            using (StreamReader r = new StreamReader(jsonPath))
+            string filePathJSON = "../Data/toxin_descriptions.json";
+
+            if (!File.Exists(filePathJSON))
             {
-                jsonString = r.ReadToEnd();
-                toxins = JsonSerializer.Deserialize<List<Toxin>>(jsonString);
+                Console.WriteLine("JSON file not found.");
+                return;
             }
 
-            using (var reader = new StreamReader(filePath))
+            try
             {
-                string headerLine = reader.ReadLine();
-                string line;
-
-                int curCategoryId = -1;
-                using (var connection = new SqliteConnection(sqlDatasource))
+                using (var connection = new SQLiteConnection(sqlDatasource))
                 {
                     connection.Open();
-                    while ((line = reader.ReadLine()) != null)
+
+                    var jsonData = File.ReadAllText(filePathJSON);
+                    var toxinList = JsonConvert.DeserializeObject<List<Toxin>>(jsonData);
+
+                    
+                    foreach (var toxin in toxinList)
                     {
-                        var values = line.Split(',');
-                        string category = values[0];
-                        string toxin = values[1];
 
-                        if (!values[0].Equals(""))
-                            curCategoryId = this.AddCategory(category);
+                        string updateQuery = "UPDATE Toxins SET description = @description WHERE toxinName = @toxinName OR categoryName = @toxinName ";
 
-                        if (toxin.Equals(""))
-                            toxin = category;
-                        Toxin tox = toxins.FirstOrDefault(t => t.Name.Equals(toxin));
-                        String desc = "None";
-                        if (tox != null)
-                            desc = tox.Description;
-                        else
-                            Debug.WriteLine($"Could not find a match for {toxin}");
-                        this.AddToxin(toxin, desc, curCategoryId);
+                        Console.WriteLine($"Executing SQL: {updateQuery}");
+                        Console.WriteLine($"Parameters: toxinName={toxin.toxin}, description={toxin.Description}");
+
+                        using (var command = new SQLiteCommand(updateQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@toxinName", toxin.toxin);
+                            command.Parameters.AddWithValue("@description", toxin.Description);
+                            
+                            command.ExecuteNonQuery();
+
+                          
+                        }
                     }
+
+                    connection.Close(); 
                 }
             }
-        }
-        private void ParseCSVConsumables(String filePath)
-        {
-            using (var reader = new StreamReader(filePath))
+            catch (Exception ex)
             {
-                string headerLine = reader.ReadLine();
-                string line;
+                Console.WriteLine("Något blev fel :(");
 
-                String lastCategory = "";
-                while ((line = reader.ReadLine()) != null)
+                    }
+                }
+
+            }
+        }
+
+        private void ParseCSVToxins()
+        {
+            string filePathCSV = "../Data/toxins.csv";
+
+            if (!File.Exists(filePathCSV))
+            {
+                Console.WriteLine("CSV file not found.");
+                return;
+            }
+
+            try
+            {
+                using (var connection = new SQLiteConnection(sqlDatasource))
                 {
-                    var values = line.Split(',');
-                    string substance = values[1];
-                    
-                    
-                    if (values[1].Equals(""))
-                        substance = values[0];
+                    connection.Open();
 
-                    
-                    using (var connection = new SqliteConnection(sqlDatasource))
+                    using (var reader = new StreamReader(filePathCSV))
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                     {
-                        connection.Open();
-                        string getToxinQuery = "SELECT * FROM Toxins WHERE Name = @Name";
-                        using (var command = new SqliteCommand(getToxinQuery, connection))
-                        {
-                            command.Parameters.AddWithValue("@Name", substance);
+                        
+                        csv.Read();
+                        csv.ReadHeader();
 
-                            object result = command.ExecuteScalar();
-                            
-                            if (result != null)
+                        var toxinRecords = new List<Toxin>();
+                        var lastCategory = new Category();
+
+                        while (csv.Read())
+                        {
+                            var toxinName = csv.GetField<string>("Toxic Compound");
+                            var categoryName = csv.GetField<string>("Toxic Compound Type");
+
+                            // Use the last non-empty category if the current one is empty
+                            if (string.IsNullOrWhiteSpace(categoryName))
                             {
-                                int toxinId = Convert.ToInt32(result);
-                                Console.WriteLine($"Toxin '{substance}' found with Id: {toxinId}");
-                                if (!values[2].Equals("-"))
-                                {
-                                    Debug.WriteLine("Adding cigarette");
-                                    this.AddConsumable("Cigarette", toxinId, ConvertToGrams(values[2]));
-                                }
-                                if (!values[3].Equals("-"))
-                                {
-                                    Debug.WriteLine("Adding E-cigarette");
-                                    this.AddConsumable("E-Cigarette", toxinId, ConvertToGrams(values[2]));
-                                }
+                                categoryName = lastCategory.Name;
                             }
                             else
                             {
-                                Console.WriteLine($"No toxin found with the name '{substance}'.");
+                                lastCategory = new Category { Name = categoryName };
                             }
-                            
+
+                            // Create a new Toxin object
+                            var toxin = new Toxin
+                            {
+                                toxin = toxinName,
+                                Category = lastCategory
+                            };
+
+                            toxinRecords.Add(toxin);
+                        }
+
+                        // Insert records into the database
+                        foreach (var toxin in toxinRecords)
+                        {
+                            string insertQuery = "INSERT INTO Toxins (toxinName, categoryName) VALUES (@toxinName, @categoryName)";
+
+                            Console.WriteLine($"Executing SQL: {insertQuery}");
+                            Console.WriteLine($"Parameters: toxinName={toxin.toxin}, categoryName={toxin.Category.Name}");
+
+                            using (var command = new SQLiteCommand(insertQuery, connection))
+                            {
+                                command.Parameters.AddWithValue("@toxinName", toxin.toxin);
+                                command.Parameters.AddWithValue("@categoryName", toxin.Category.Name);
+
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                        // Verify the insertion
+                        string selectQuery = "SELECT COUNT(*) FROM Toxins";
+                        using (var selectCommand = new SQLiteCommand(selectQuery, connection))
+                        {
+                            var count = selectCommand.ExecuteScalar();
+                            Console.WriteLine($"Number of rows in Toxins table: {count}");
                         }
                     }
-                        
-                    
-                    //float cigPerPuff = ConvertToGrams(values[2]);
-                    //float eCigPerPuff = ConvertToGrams(values[3]);
-
-                    //Debug.WriteLine($"{lastCategory}, {substance}, {cigPerPuff}, {eCigPerPuff}");
-
                 }
-
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
-        private void AddConsumable(string name, int toxinId, float amount)
+
+
+        private void AddConsumable(string toxinName, string nameConsumable, float amount)
         {
             using (var connection = new SqliteConnection(sqlDatasource))
             {
                 connection.Open();
 
                 string insertConsumableQuery = @"
-                    INSERT INTO Consumables (ToxinId, Name, Amount)
-                    VALUES (@ToxinId, @Name, @Amount)";
+                    INSERT INTO Consumables (toxinName, nameConsumable, amount)
+                    VALUES (@toxinName, @nameConsumable, @amount)";
                 using (var command = new SqliteCommand(insertConsumableQuery, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", name);
-                    command.Parameters.AddWithValue("@ToxinId", toxinId);
-                    command.Parameters.AddWithValue("@Amount", amount);
+                    command.Parameters.AddWithValue("@toxinName", toxinName);
+                    command.Parameters.AddWithValue("@nameConsumable", nameConsumable);
+                    command.Parameters.AddWithValue("@amount", amount);
                     int rowsAffected = command.ExecuteNonQuery();
                     Console.WriteLine($"{rowsAffected} row(s) inserted into the Consumables table.");
                 }
             }
 
         }
+      
+
+        private void AddToxin(String toxinName, String categoryName, String description)
+        {
+
+            using (var connection = new SqliteConnection(sqlDatasource))
+            {
+                connection.Open();
+                string insertToxinQuery = "INSERT INTO Toxins (toxinName, categoryName, description) VALUES (@toxinName, @categoryName, @description)";
+                using (var insertToxinCommand = new SqliteCommand(insertToxinQuery, connection))
+                {
+                    insertToxinCommand.Parameters.AddWithValue("@toxinName", toxinName);
+                    insertToxinCommand.Parameters.AddWithValue("@categoryName", categoryName);
+                    insertToxinCommand.Parameters.AddWithValue("@description", description);
+                   
+                }
+            }
+            
+        }
+        private void AddCategory(String categoryName)
+        {
+
+            using (var connection = new SqliteConnection(sqlDatasource))
+            {
+                connection.Open();
+                string insertCategoryQuery = "INSERT INTO Categories (categoryName) VALUES (@categoryName)";
+                using (var insertCategoryCommand = new SqliteCommand(insertCategoryQuery, connection))
+                {
+                    insertCategoryCommand.Parameters.AddWithValue("@categoryName", categoryName);
+                    
+                }
+            } 
+        }
+
         private float ConvertToGrams(string amount)
         {
             string[] parts = amount.Split(" ");
@@ -242,57 +296,6 @@ namespace API.Manager
 
             return value;
         }
-
-        private int AddToxin(String toxinName, String description, int category)
-        {
-
-            using (var connection = new SqliteConnection(sqlDatasource))
-            {
-                connection.Open();
-                string insertToxinQuery = "INSERT INTO Toxins (CategoryId, Name, Description) VALUES (@CategoryId, @Name, @Description)";
-                using (var insertToxinCommand = new SqliteCommand(insertToxinQuery, connection))
-                {
-                    insertToxinCommand.Parameters.AddWithValue("@CategoryId", category);
-                    insertToxinCommand.Parameters.AddWithValue("@Name", toxinName);
-                    insertToxinCommand.Parameters.AddWithValue("@Description", description);
-                    insertToxinCommand.ExecuteNonQuery();
-                    Console.WriteLine($"Toxin '{toxinName}' added under CategoryId {category}.");
-                }
-            }
-            return 0;
-        }
-        private int AddCategory(String categoryName)
-        {
-            int id = -1;
-            using (var connection = new SqliteConnection(sqlDatasource))
-            {
-                connection.Open();
-                string getCategoryQuery = "SELECT Id FROM Categories WHERE Name = @Name";
-                using (var getCategoryCommand = new SqliteCommand(getCategoryQuery, connection))
-                {
-                    getCategoryCommand.Parameters.AddWithValue("@Name", categoryName);
-                    var result = getCategoryCommand.ExecuteScalar();
-
-                    if (result == null)
-                    {
-                        // Step 2: If the category does not exist, insert it
-                        string insertCategoryQuery = "INSERT INTO Categories (Name) VALUES (@Name); SELECT last_insert_rowid();";
-                        using (var insertCategoryCommand = new SqliteCommand(insertCategoryQuery, connection))
-                        {
-                            insertCategoryCommand.Parameters.AddWithValue("@Name", categoryName);
-                            id = Convert.ToInt32(insertCategoryCommand.ExecuteScalar());
-                            Console.WriteLine($"Category '{categoryName}' inserted with Id {id}.");
-                        }
-                    }
-                    else
-                    {
-                        // The category exists, get the Id
-                        id = Convert.ToInt32(result);
-                        Console.WriteLine($"Category '{categoryName}' already exists with Id {id}.");
-                    }
-                }
-            }
-            return id;
-        }
     }
+
 }

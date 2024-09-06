@@ -1,15 +1,15 @@
-﻿using CsvHelper;
+﻿
 using Microsoft.Data.Sqlite;
 using System.Globalization;
 using System.Text.Json.Serialization;
-
 using System.Data.SQLite;
 using API.Models;
 using Newtonsoft.Json;
+using CsvHelper;
 
 
 
-   
+namespace API.Manager { 
 
     public class DatabaseGenerator
     {
@@ -133,10 +133,10 @@ using Newtonsoft.Json;
             {
                 Console.WriteLine("Något blev fel :(");
 
-                    }
-                }
-
             }
+                
+
+            
         }
 
         private void ParseCSVToxins()
@@ -297,5 +297,7 @@ using Newtonsoft.Json;
             return value;
         }
     }
+
+
 
 }

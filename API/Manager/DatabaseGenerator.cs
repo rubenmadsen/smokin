@@ -6,10 +6,11 @@ using System.Data.SQLite;
 using API.Models;
 using Newtonsoft.Json;
 using CsvHelper;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 //test
 
-namespace API.Manager { 
+namespace API.Manager {
 
     public class DatabaseGenerator
     {
@@ -21,13 +22,13 @@ namespace API.Manager {
 
 
 
-      
+
 
         public int GenerateDatabase()
         {
-           
-            
- 
+
+
+
             using (var connection = new SqliteConnection(sqlDatasource))
             {
                 connection.Open(); //kolla om den behövs
@@ -51,7 +52,7 @@ namespace API.Manager {
                 string createToxinsTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Toxins (
                         toxinName TEXT PRIMARY KEY,
-                        categoryName TEXT REFERENCES Categories(categoryName),
+                        categoryName TEXT ,
                         description TEXT 
                         
                     );";
@@ -65,9 +66,9 @@ namespace API.Manager {
                 string createConsumablesTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Consumables (
                         
-                       toxinName TEXT PRIMARY KEY REFERENCES Toxins, 
+                       toxinName TEXT, 
                         nameConsumable TEXT NOT NULL,
-                        amount REAL
+                        amount TEXT
                         
                     );";
                 using (var command = new SqliteCommand(createConsumablesTableQuery, connection))
@@ -79,12 +80,282 @@ namespace API.Manager {
 
             ParseCSVToxins();
             ParseJSONToxins();
-            
+            ParseCSVConsumableCig();
+            ParseCSVConsumableEcig();
+            ParseCSVCategory();
+
             return 0;
         }
 
-       
+        public void ParseCSVCategory(){
+            string filePathCSV = "../Data/toxins.csv";
 
+            if (!File.Exists(filePathCSV))
+            {
+                Console.WriteLine("CSV file not found.");
+                return;
+            }
+
+            try
+            {
+                using (var connection = new SQLiteConnection(sqlDatasource))
+                {
+                    connection.Open();
+
+                    using (var reader = new StreamReader(filePathCSV))
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+
+                        csv.Read();
+                        csv.ReadHeader();
+
+                        var categoryRecords = new List<Category>();
+                        
+
+                        while (csv.Read())
+                        {
+                            var compoundType = csv.GetField<string>("Toxic Compound Type");
+                           
+
+
+
+                            var category = new Category()
+                            {
+                                Name = compoundType
+                             
+                            };
+
+                            categoryRecords.Add(category);
+                        }
+
+                        foreach (var category in categoryRecords)
+                        {
+                            string insertQuery = "INSERT INTO Categories (categoryName) VALUES (@categoryName)";
+
+                            Console.WriteLine($"Executing SQL: {insertQuery}");
+                            Console.WriteLine($"Parameters: Name={category.Name}");
+
+                            using (var command = new SQLiteCommand(insertQuery, connection))
+                            {
+                                //hårdkodad då nicotine är en category och inte har ngt toxinname :))
+                                if (category.Name != "")
+                                {
+                                    command.Parameters.AddWithValue("@categoryName", category.Name);
+
+
+                                    command.ExecuteNonQuery();
+
+                                }
+
+                            }
+                        }
+
+                        
+                       
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+
+        }
+
+        public void ParseCSVConsumableEcig()
+        {
+
+            string filePathCSV = "../Data/toxins.csv";
+
+            if (!File.Exists(filePathCSV))
+            {
+                Console.WriteLine("CSV file not found.");
+                return;
+            }
+
+            try
+            {
+                using (var connection = new SQLiteConnection(sqlDatasource))
+                {
+                    connection.Open();
+
+                    using (var reader = new StreamReader(filePathCSV))
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+
+                        csv.Read();
+                        csv.ReadHeader();
+
+                        var consumableRecords = new List<Consumable>();
+                        var consumableEcig = new List<Consumable>();
+
+                        while (csv.Read())
+            {
+                var toxinCompound = csv.GetField<string>("Toxic Compound");
+                var concentration = csv.GetField<string>("Concentration Range E-Cigarette (/Puff)");
+
+
+         
+                var consumable = new Consumable()
+                {
+                    Name = "e-cig",
+                    toxinName = toxinCompound,
+                    amount = concentration
+                };
+
+                consumableEcig.Add(consumable);
+            }
+
+            foreach (var consumable in consumableEcig)
+            {
+                string insertQuery = "INSERT INTO Consumables (toxinName, nameConsumable, amount) VALUES (@toxinName, @nameConsumable, @amount)";
+
+                Console.WriteLine($"Executing SQL: {insertQuery}");
+                Console.WriteLine($"Parameters: toxinName={consumable.toxinName}, nameConsumable={consumable.Name}, amount={consumable.amount}");
+
+                using (var command = new SQLiteCommand(insertQuery, connection))
+                {
+                    //hårdkodad då nicotine är en category och inte har ngt toxinname :))
+                    if (consumable.toxinName == "")
+                    {
+                        command.Parameters.AddWithValue("@toxinName", "Nicotine");
+                        command.Parameters.AddWithValue("@nameConsumable", consumable.Name);
+                        command.Parameters.AddWithValue("@amount", consumable.amount);
+                        command.ExecuteNonQuery();
+
+                    }
+
+                    else
+                    {
+                        command.Parameters.AddWithValue("@toxinName", consumable.toxinName);
+                        command.Parameters.AddWithValue("@nameConsumable", consumable.Name);
+                        command.Parameters.AddWithValue("@amount", consumable.amount);
+
+                        command.ExecuteNonQuery();
+                    }
+
+
+                }
+            }
+
+                        // Verify the insertion
+                        string selectQuery = "SELECT COUNT(*) FROM Consumables";
+                        using (var selectCommand = new SQLiteCommand(selectQuery, connection))
+                        {
+                            var count = selectCommand.ExecuteScalar();
+                            Console.WriteLine($"Number of rows in Toxins table: {count}");
+                        }
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+
+
+        }
+        public void ParseCSVConsumableCig()
+
+            
+        {
+
+            string filePathCSV = "../Data/toxins.csv";
+
+            if (!File.Exists(filePathCSV))
+            {
+                Console.WriteLine("CSV file not found.");
+                return;
+            }
+
+            try
+            {
+                using (var connection = new SQLiteConnection(sqlDatasource))
+                {
+                    connection.Open();
+
+                    using (var reader = new StreamReader(filePathCSV))
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+
+                        csv.Read();
+                        csv.ReadHeader();
+
+                        var consumableRecords = new List<Consumable>();
+                        var consumableEcig = new List<Consumable>();
+                        
+
+                        while (csv.Read())
+                        {
+                            var toxinCompound = csv.GetField<string>("Toxic Compound");
+                            var concentration = csv.GetField<string>("Concentration Range Cigarette (/Puff)");
+
+
+
+                            var consumable = new Consumable()
+                            {
+                                Name = "cig",
+                                toxinName = toxinCompound,
+                                amount = concentration
+                            };
+
+                            consumableRecords.Add(consumable);
+                        }
+
+                        // Insert records into the database
+                        foreach (var consumable in consumableRecords)
+                        {
+                            string insertQuery = "INSERT INTO Consumables (toxinName, nameConsumable, amount) VALUES (@toxinName, @nameConsumable, @amount)";
+
+                            Console.WriteLine($"Executing SQL: {insertQuery}");
+                            Console.WriteLine($"Parameters: toxinName={consumable.toxinName}, nameConsumable={consumable.Name}, amount={consumable.amount}");
+
+                            using (var command = new SQLiteCommand(insertQuery, connection))
+                            {
+                                //hårdkodad då nicotine är en category och inte har ngt toxinname :))
+                                if (consumable.toxinName == "")
+                                {
+                                    command.Parameters.AddWithValue("@toxinName", "Nicotine");
+                                    command.Parameters.AddWithValue("@nameConsumable", consumable.Name);
+                                    command.Parameters.AddWithValue("@amount", consumable.amount);
+                                    command.ExecuteNonQuery();
+
+                                }
+
+                                else
+                                {
+                                    command.Parameters.AddWithValue("@toxinName", consumable.toxinName);
+                                    command.Parameters.AddWithValue("@nameConsumable", consumable.Name);
+                                    command.Parameters.AddWithValue("@amount", consumable.amount);
+
+                                    command.ExecuteNonQuery();
+                                }
+                            }
+                        }
+
+                        // Verify the insertion
+                        string selectQuery = "SELECT COUNT(*) FROM Consumables";
+                        using (var selectCommand = new SQLiteCommand(selectQuery, connection))
+                        {
+                            var count = selectCommand.ExecuteScalar();
+                            Console.WriteLine($"Number of rows in Toxins table: {count}");
+                        }
+
+                       
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+        }
 
 
         public void ParseJSONToxins()

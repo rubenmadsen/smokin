@@ -34,7 +34,6 @@
       Loading toxins data...
     </div>
     <TestComponent></TestComponent>
-    <!-- Add the Test component here -->
     <Test />
   </div>
 </template>

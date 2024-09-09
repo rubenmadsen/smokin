@@ -485,10 +485,20 @@ namespace API.Manager {
 
                             using (var command = new SQLiteCommand(insertQuery, connection))
                             {
-                                command.Parameters.AddWithValue("@toxinName", toxin.toxin);
-                                command.Parameters.AddWithValue("@categoryName", toxin.Category.Name);
+                                if (toxin.Category.Name == "Nicotine")
+                                {
+                                    
+                                    command.Parameters.AddWithValue("@toxinName", toxin.Category.Name);
+                                    command.Parameters.AddWithValue("@categoryName", toxin.Category.Name);
+                                    command.ExecuteNonQuery();
+                                }
+                                else
+                                {
+                                    command.Parameters.AddWithValue("@toxinName", toxin.toxin);
+                                    command.Parameters.AddWithValue("@categoryName", toxin.Category.Name);
 
-                                command.ExecuteNonQuery();
+                                    command.ExecuteNonQuery();
+                                }
                             }
                         }
 

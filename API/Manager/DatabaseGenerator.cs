@@ -76,6 +76,18 @@ namespace API.Manager {
                     command.ExecuteNonQuery();
                     Console.WriteLine("Table 'Consumables' created successfully.");
                 }
+
+                string createUserTableQuery = @"CREATE TABLE IF NOT EXISTS Users (
+                    userName TEXT,
+                    date DATE,
+                    amount INTEGER
+                        );";
+
+                using (var command = new SqliteCommand(createUserTableQuery, connection))
+                {
+                    command.ExecuteNonQuery();
+                    Console.WriteLine("Table 'Users' created successfully.");
+                }
             }
 
             ParseCSVToxins();

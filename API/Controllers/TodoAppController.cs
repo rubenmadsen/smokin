@@ -13,6 +13,9 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using API.Manager;
+using API.Models;
+using Microsoft.AspNetCore.JsonPatch.Internal;
+
 namespace API.Controllers
 {
     
@@ -115,15 +118,16 @@ namespace API.Controllers
         }
 
 
-        [SwaggerOperation(Summary = "Returns data on toxins derived from smoking.")]
-        [HttpGet]
-        [Route("GetToxinData")]
-        public IActionResult GetToxinData()
+        // Endpoint: GP-27
+        [SwaggerOperation(Summary = "Add a row with userName, date, amount in the Table Users")]
+        [HttpPost]
+        [Route("PostNewUserTrackingData")]
+        public IActionResult PostNewUserTrackingData([FromForm] string userName, [FromForm] string consumableName, [FromForm] DateTime date, [FromForm] int amount)
         {
             try
             {
-                string query = "select * from Toxins";
-                DataTable table = new DataTable();
+
+                string query = "INSERT INTO Users (userName, consumableName, date, amount) VALUES (@userName, @consumableName, @date, @amount)";
                 string sqlDatasource = _configuration.GetConnectionString("DBcon");
 
                 using (var myCon = new SqliteConnection(sqlDatasource))
@@ -132,15 +136,17 @@ namespace API.Controllers
 
                     using (var myCommand = new SqliteCommand(query, myCon))
                     {
-                        using (var myReader = myCommand.ExecuteReader())
-                        {
-                            table.Load(myReader);
-                        }
+
+                        myCommand.Parameters.AddWithValue("@userName", userName);
+                        myCommand.Parameters.AddWithValue("@consumableName", consumableName);
+                        myCommand.Parameters.AddWithValue("@date", date);
+                        myCommand.Parameters.AddWithValue("@amount", amount);
+                        myCommand.ExecuteNonQuery();
                     }
                 }
 
-                _logger.LogInformation("GetToxinData");
-                return Ok(new JsonResult(table));
+                _logger.LogInformation("PostNewUserTrackingData");
+                return StatusCode(200, "All good, added new data in the hood.");
             }
             catch (SqliteException ex)
             {
@@ -153,6 +159,7 @@ namespace API.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
+
 
         [SwaggerOperation(Summary = "Returns descriptions for individual toxins, detailing their effects on the body.")]
         [HttpGet]

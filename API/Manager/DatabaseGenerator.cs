@@ -79,6 +79,7 @@ namespace API.Manager {
 
                 string createUserTableQuery = @"CREATE TABLE IF NOT EXISTS Users (
                     userName TEXT,
+                    consumableName TEXT,
                     date DATE,
                     amount INTEGER
                         );";

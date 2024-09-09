@@ -53,7 +53,7 @@ export default {
     }
   },
   components: {
-    TestComponent, // Register the Test component
+    TestComponent, 
   },
   methods: {
     async getData() {

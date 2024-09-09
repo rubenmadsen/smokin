@@ -30,7 +30,48 @@ namespace API.Controllers
            
         }
 
-        
+
+        // Endpoint: GP-26
+        [SwaggerOperation(Summary = "Returns all substances and the corresponding concentrations of Cigarette / E-Cigarette")]
+        [HttpGet]
+        [Route("GetSubstancesAndConcentrations/{cigarette_type}")]
+        public IActionResult GetSubstancesAndConcentrations(string cigarette_type)
+        {
+            try
+            {
+                string query = "SELECT toxinName, Amount FROM Consumables WHERE nameConsumable = @cigarette_type AND Amount <> '-'";
+                DataTable table = new DataTable();
+                string sqlDatasource = _configuration.GetConnectionString("DBcon");
+
+                using (var myCon = new SqliteConnection(sqlDatasource))
+                {
+                    myCon.Open();
+
+                    using (var myCommand = new SqliteCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@cigarette_type", cigarette_type);
+                        using (var myReader = myCommand.ExecuteReader())
+                        {
+                            table.Load(myReader);
+                        }
+                    }
+                }
+
+                _logger.LogInformation("GetSubstancesAndConcentrations");
+                return Ok(new JsonResult(table));
+            }
+            catch (SqliteException ex)
+            {
+                _logger.LogCritical(ex, "SQLite error occurred");
+                return StatusCode(500, "An error occurred while accessing the SQLite database.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "An unexpected error occurred");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
 
         [SwaggerOperation(Summary = "Returns data on toxins derived from smoking.")]
         [HttpGet]

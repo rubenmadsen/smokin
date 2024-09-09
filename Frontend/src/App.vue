@@ -13,7 +13,9 @@
       </a></li>
     </ul> 
   </nav>
-  <router-view></router-view>
+  <div class="mainContainer">
+      <router-view></router-view>
+  </div>
 </template>
 
 
@@ -87,5 +89,11 @@ li a:hover svg path {
 
 .home{
   padding: 1rem;
+}
+.mainContainer{
+  width: 1000px;
+  margin: auto;
+  height: 600px;
+  background-color: #752d2d;
 }
 </style>

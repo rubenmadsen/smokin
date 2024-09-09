@@ -7,6 +7,7 @@ using API.Models;
 using Newtonsoft.Json;
 using CsvHelper;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.Extensions.Primitives;
 
 //test
 
@@ -68,7 +69,7 @@ namespace API.Manager {
                         
                        toxinName TEXT, 
                         nameConsumable TEXT NOT NULL,
-                        amount TEXT
+                        amount FLOAT
                         
                     );";
                 using (var command = new SqliteCommand(createConsumablesTableQuery, connection))
@@ -234,7 +235,7 @@ namespace API.Manager {
                     {
                         command.Parameters.AddWithValue("@toxinName", "Nicotine");
                         command.Parameters.AddWithValue("@nameConsumable", consumable.Name);
-                        command.Parameters.AddWithValue("@amount", consumable.amount);
+                        command.Parameters.AddWithValue("@amount",ConvertToMg(consumable.amount));
                         command.ExecuteNonQuery();
 
                     }
@@ -243,7 +244,7 @@ namespace API.Manager {
                     {
                         command.Parameters.AddWithValue("@toxinName", consumable.toxinName);
                         command.Parameters.AddWithValue("@nameConsumable", consumable.Name);
-                        command.Parameters.AddWithValue("@amount", consumable.amount);
+                        command.Parameters.AddWithValue("@amount", ConvertToMg(consumable.amount));
 
                         command.ExecuteNonQuery();
                     }
@@ -334,7 +335,7 @@ namespace API.Manager {
                                 {
                                     command.Parameters.AddWithValue("@toxinName", "Nicotine");
                                     command.Parameters.AddWithValue("@nameConsumable", consumable.Name);
-                                    command.Parameters.AddWithValue("@amount", consumable.amount);
+                                    command.Parameters.AddWithValue("@amount", ConvertToMg(consumable.amount));
                                     command.ExecuteNonQuery();
 
                                 }
@@ -343,7 +344,7 @@ namespace API.Manager {
                                 {
                                     command.Parameters.AddWithValue("@toxinName", consumable.toxinName);
                                     command.Parameters.AddWithValue("@nameConsumable", consumable.Name);
-                                    command.Parameters.AddWithValue("@amount", consumable.amount);
+                                    command.Parameters.AddWithValue("@amount", ConvertToMg(consumable.amount));
 
                                     command.ExecuteNonQuery();
                                 }
@@ -507,75 +508,37 @@ namespace API.Manager {
         }
 
 
-        private void AddConsumable(string toxinName, string nameConsumable, float amount)
-        {
-            using (var connection = new SqliteConnection(sqlDatasource))
-            {
-                connection.Open();
-
-                string insertConsumableQuery = @"
-                    INSERT INTO Consumables (toxinName, nameConsumable, amount)
-                    VALUES (@toxinName, @nameConsumable, @amount)";
-                using (var command = new SqliteCommand(insertConsumableQuery, connection))
-                {
-                    command.Parameters.AddWithValue("@toxinName", toxinName);
-                    command.Parameters.AddWithValue("@nameConsumable", nameConsumable);
-                    command.Parameters.AddWithValue("@amount", amount);
-                    int rowsAffected = command.ExecuteNonQuery();
-                    Console.WriteLine($"{rowsAffected} row(s) inserted into the Consumables table.");
-                }
-            }
-
-        }
       
 
-        private void AddToxin(String toxinName, String categoryName, String description)
-        {
+      
+      
 
-            using (var connection = new SqliteConnection(sqlDatasource))
-            {
-                connection.Open();
-                string insertToxinQuery = "INSERT INTO Toxins (toxinName, categoryName, description) VALUES (@toxinName, @categoryName, @description)";
-                using (var insertToxinCommand = new SqliteCommand(insertToxinQuery, connection))
-                {
-                    insertToxinCommand.Parameters.AddWithValue("@toxinName", toxinName);
-                    insertToxinCommand.Parameters.AddWithValue("@categoryName", categoryName);
-                    insertToxinCommand.Parameters.AddWithValue("@description", description);
-                   
-                }
-            }
-            
-        }
-        private void AddCategory(String categoryName)
-        {
-
-            using (var connection = new SqliteConnection(sqlDatasource))
-            {
-                connection.Open();
-                string insertCategoryQuery = "INSERT INTO Categories (categoryName) VALUES (@categoryName)";
-                using (var insertCategoryCommand = new SqliteCommand(insertCategoryQuery, connection))
-                {
-                    insertCategoryCommand.Parameters.AddWithValue("@categoryName", categoryName);
-                    
-                }
-            } 
-        }
-
-        private float ConvertToGrams(string amount)
+        private float ConvertToMg(string amount)
         {
             string[] parts = amount.Split(" ");
             string unit = parts[1];
             string num = parts[0];
+          
             if (num.StartsWith("<"))
                 num = num.Substring(1);
-            float.TryParse(num, out float value);
+            Console.WriteLine(num, "num after substring(1)");
+        
+            float.TryParse(num, NumberStyles.Float, CultureInfo.InvariantCulture, out float value);
 
+            
             if (unit.Contains("mg"))
-                value /= 1000.0f;
-            else if (unit.Contains("µg"))
-                value /= 1000000.0f;
+            {
+                value = value/ 1.0f;
+            }
+
+            if (unit.Contains("µg"))
+            {
+                value = value / 1000.0f;
+            }
             else if (unit.Contains("ng"))
-                value /= 1000000000.0f;
+            {
+                value = value/ 1000000.0f;
+            }
 
             return value;
         }

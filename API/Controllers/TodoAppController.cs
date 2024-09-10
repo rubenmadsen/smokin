@@ -161,6 +161,48 @@ namespace API.Controllers
         }
 
 
+        // Endpoint: GP-28
+        [SwaggerOperation(Summary = "Returns all logged data for a specified user.")]
+        [HttpGet]
+        [Route("GetTrackedUserData/{userName}")]
+        public IActionResult GetTrackedUserData(string userName)
+        {
+            try
+            {
+                string query = "SELECT consumableName, date, amount FROM Users WHERE userName = @userName";
+                DataTable table = new DataTable();
+                string sqlDatasource = _configuration.GetConnectionString("DBcon");
+
+                using (var myCon = new SqliteConnection(sqlDatasource))
+                {
+                    myCon.Open();
+
+                    using (var myCommand = new SqliteCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@userName", userName);
+                        using (var myReader = myCommand.ExecuteReader())
+                        {
+                            table.Load(myReader);
+                        }
+                    }
+                }
+
+                _logger.LogInformation("GetSubstanceCategoryAndDescription");
+                return Ok(new JsonResult(table));
+            }
+            catch (SqliteException ex)
+            {
+                _logger.LogCritical(ex, "SQLite error occurred");
+                return StatusCode(500, "An error occurred while accessing the SQLite database.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "An unexpected error occurred");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+
         [SwaggerOperation(Summary = "Returns descriptions for individual toxins, detailing their effects on the body.")]
         [HttpGet]
         [Route("GetToxinsDescriptions")]

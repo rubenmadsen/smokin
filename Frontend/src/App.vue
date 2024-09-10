@@ -25,6 +25,8 @@
   padding: 0;
 }
 
+
+
 body {
   font-family: 'Helvetica'
 }
@@ -91,9 +93,11 @@ li a:hover svg path {
   padding: 1rem;
 }
 .mainContainer{
-  width: 1000px;
-  margin: auto;
-  height: 600px;
+  max-width: 1500px;
+  margin-inline: auto;
+  min-height:800px;
   background-color: #752d2d;
 }
 </style>
+
+

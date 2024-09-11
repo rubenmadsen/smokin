@@ -36,5 +36,57 @@ class Backend {
       });
   }
 
+  // Endpoint: GP-26
+  static getSubstancesAndConcentrations(cigarrette_type) {
+    const URL = API_URL + 'GetSubstancesAndConcentrations/' + cigarrette_type + '/';
+    return Backend.getAxios().get(URL)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  // Endpoint: GP-29
+  static getSubstanceCategoryAndDescription() {
+    const URL = API_URL + 'GetSubstanceCategoryAndDescription/';
+    return Backend.getAxios().get(URL)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+// Endpoint: GP-27
+static postNewUserTrackingData(formData) {
+  const URL = API_URL + 'PostNewUserTrackingData/';
+  return Backend.getAxios().post(URL, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+  .then((response) => {
+    return response.data;
+  })
+  .catch((error) => {
+    throw error;
+  });
+}
+
+// Endpoint: GP-28
+static getTrackedUserData() {
+  const URL = API_URL + 'GetTrackedUserData/';
+  return Backend.getAxios().get(URL)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      throw error;
+    });
+}
+
 }
 export default Backend;

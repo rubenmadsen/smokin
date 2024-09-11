@@ -10,16 +10,16 @@
       <table class="toxins-table">
         <thead>
           <tr>
-            <th>Compound</th>
-            <th>Tobacco Concentration</th>
-            <th>Electronic Concentration</th>
+            <th>Toxic name</th>
+            <th>Toxic compounds</th>
+            <th>description</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(toxin, index) in toxins" :key="index">
-            <td>{{ toxin.Compound }}</td>
-            <td>{{ toxin.Tobacco }}</td>
-            <td>{{ toxin.Electronic }}</td>
+            <td>{{ toxin.toxinName }}</td>
+            <td>{{ toxin.categoryName }}</td>
+            <td>{{ toxin.description }}</td>
           </tr>
         </tbody>
       </table>
@@ -59,7 +59,7 @@ export default {
     async getData() {
       try {
         await new Promise(resolve => setTimeout(resolve, 1000));
-        const response = await axios.get(URL_FOR_LOCAL_HOST + "api/TodoApp/GetToxinData");
+        const response = await axios.get(URL_FOR_LOCAL_HOST + "api/TodoApp/GetSubstanceCategoryAndDescription");
         this.toxins = Object.keys(response.data).map(key => response.data[key]).filter(value => value !== null)[0];
         console.log(this.toxins);
       } catch (error) {

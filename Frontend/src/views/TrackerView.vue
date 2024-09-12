@@ -1,11 +1,6 @@
 <template>
-    <div class="sumContainer">
-      <div class="child">
-        <p>money</p>
-      </div>
-      <div class="child">
-        <p>time</p>
-      </div>
+    <div class="dashboard">
+      <DashMeter></DashMeter>
     </div>
     <div>
         <h2>Graph</h2>
@@ -13,24 +8,20 @@
   </template>
   
   <script>
+  import DashMeter from '@/components/DashMeter.vue';
   export default {
-    name: 'TrackerView'
+    name: 'TrackerView',
+    components: {
+      DashMeter, 
+    },
   }
   </script>
   
   <style scoped>
-    .sumContainer{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
+    .dashboard{
+      border: solid whitesmoke 1px;
+      padding: 1rem;
     }
-    .child{
-        width: 150px;
-        height: 150px;
-        background-color: blueviolet;
-    }
-    .sumContainer last-child{
-        background-color: aqua;
-    }
+  
   </style>
   

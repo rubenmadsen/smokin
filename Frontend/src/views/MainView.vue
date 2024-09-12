@@ -1,7 +1,7 @@
 <template>
   <div class="mainContainer">
     <div id="child1">
-      <input v-model="inputData" placeholder="Enter something" />
+
       <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }"
         ><h1>Jag vill veta mer hur rökning påverkar mig!!</h1></router-link
       >
@@ -11,7 +11,7 @@
         {{ decreasedLifeExpectancy }} minutes.
       </h1>
       <h1 :style="{ color: 'white' }">You have spent {{ moneySpent }} SEK.</h1>
-      <router-link :to="{ path: '/tracker', query: { data: inputData } }">
+      <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
         <button>Jag vill förändra mitt liv nu!</button>
       </router-link>
     </div>
@@ -108,6 +108,15 @@ export default {
         },
       };
     },
+    trackerLink(){
+      return {
+        path: "/tracker",
+        query: {
+          data: this.sliderValueAmount ,
+          years: this.sliderValueYears,
+        },
+      }
+    }
   },
   mounted() {
     console.log('Query Params:', this.$route.query);

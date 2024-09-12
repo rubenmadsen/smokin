@@ -2,6 +2,8 @@
     <div class="sumContainer">
       <div class="child">
         <p>money</p>
+        <p > {{numberOfCig}} </p>
+        <p >{{ yearsOfSmoking }}</p>
       </div>
       <div class="child">
         <p>time</p>
@@ -14,7 +16,30 @@
   
   <script>
   export default {
-    name: 'TrackerView'
+    name: 'TrackerView',
+    props: {
+    data: {
+      type: String,
+      default: "No data received"
+    },
+    years: {
+      type: String,
+      default: "No years received"
+    }
+  },
+    data() {
+    return {
+     
+      numberOfCig: this.data || "No data", // Default slider value
+      yearsOfSmoking: this.years|| "No data" ,
+      
+    };
+  },
+  computed: {
+    receivedData() {
+      return this.$route.query.data || "No data received";
+    }
+  }
   }
   </script>
   

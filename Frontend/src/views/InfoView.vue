@@ -1,7 +1,7 @@
 <template>
   <div class="mainContainer">
     <div id="child1">
-      <router-link :to="{ path: '/tracker', query: { data: inputData } }">
+      <router-link :to="{ path: '/tracker', query: { data : this.sliderValueAmountInfo, years: this.sliderValueYearsInfo } }">
         <button>Jag vill förändra mitt liv nu!</button>
       </router-link>
     </div>
@@ -109,6 +109,15 @@ export default {
       );
     },
   },
+  trackerLink(){
+      return {
+        path: "/tracker",
+        query: {
+          data: this.sliderValueAmount ,
+          years: this.sliderValueYears,
+        },
+      }
+    }
 };
 </script>
 

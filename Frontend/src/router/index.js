@@ -4,6 +4,9 @@ import TrackerView from '@/views/TrackerView.vue'
 import InfoView from '@/views/InfoView.vue'
 
 
+
+
+
 const routes = [
   {
     path: '/',
@@ -18,7 +21,11 @@ const routes = [
   {
     path: '/info',
     name: 'info',
-    component: InfoView
+    component: InfoView,
+    props: route => ({
+      data: route.query.data,
+      years: route.query.years
+    })
   },
   {
     path: '/tracker',

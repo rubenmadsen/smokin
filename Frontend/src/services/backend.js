@@ -77,8 +77,8 @@ static postNewUserTrackingData(formData) {
 }
 
 // Endpoint: GP-28
-static getTrackedUserData() {
-  const URL = API_URL + 'GetTrackedUserData/';
+static getTrackedUserData(username) {
+  const URL = API_URL + 'GetTrackedUserData/' + username + '/';
   return Backend.getAxios().get(URL)
     .then((response) => {
       return response.data;
@@ -87,6 +87,14 @@ static getTrackedUserData() {
       throw error;
     });
 }
+
+/*
+let formData = new FormData();
+                formData.append('userName', "Dolk Lundgren");
+                formData.append('consumableName', "Cigarette");
+                formData.append('date', "2000-01-01");
+                formData.append('amount', 3);
+*/
 
 }
 export default Backend;

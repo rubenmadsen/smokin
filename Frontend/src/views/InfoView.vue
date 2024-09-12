@@ -3,7 +3,11 @@
     <div id="child1">
       <router-link :to="{ path: '/tracker', query: { data: inputData } }">
         <button>Jag vill förändra mitt liv nu!</button>
+       
       </router-link>
+      <div id="app">
+    <BarChart :data="chartData" :categories="chartCategories" />
+  </div>
     </div>
     <div id="child2">
       <h1 :style="{ color: 'white' }">
@@ -56,8 +60,20 @@
 </template>
 
 <script>
+
+import BarChart from '/src/components/BarChart.vue';
+import axios from 'axios';
+
+const URL_FOR_LOCAL_HOST = "https://localhost:7197/";
+
+
 export default {
   name: "InfoView",
+  components: {
+    BarChart
+
+  },
+
   props: {
     data: {
       type: String,
@@ -76,6 +92,10 @@ export default {
       sliderValueYearsInfo: this.years|| "No data" ,
       reduceLifeRate: 11, // Default value used, we assume 11 min for cigarette and 9 min for e-cigarette
       moneySpendingRate: 4, // Cost in SEK per cigarette, we assume 4 kr for cigarette and 2 kr for e-cigarette
+      toxinNames: [],
+      chartData: [40, 43, 44, 47, 54, 58, 69, 110, 120, 138],
+      chartCategories: [],
+      fetchError: false
     };
   },
   methods: {
@@ -84,6 +104,18 @@ export default {
       this.reduceLifeRate = this.selectedButton === "Cigarette" ? 11 : 9;
       this.moneySpendingRate = this.selectedButton === "Cigarette" ? 4 : 2;
     },
+    async getData() {
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const response = await axios.get(URL_FOR_LOCAL_HOST + "api/TodoApp/GetSubstanceCategoryAndDescription");
+        this.toxinNames = Object.keys(response.data).map(key => response.data[key]).filter(value => value !== null)[0];
+        this.chartCategories = this.toxinNames.map(toxin => toxin.toxinName);
+    
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        this.fetchError = true;
+      }
+    }
   },
   computed: {
     receivedData() {
@@ -109,6 +141,9 @@ export default {
       );
     },
   },
+  mounted: function() {
+    this.getData();
+  }
 };
 </script>
 

@@ -4,9 +4,6 @@ import TrackerView from '@/views/TrackerView.vue'
 import InfoView from '@/views/InfoView.vue'
 
 
-
-
-
 const routes = [
   {
     path: '/',

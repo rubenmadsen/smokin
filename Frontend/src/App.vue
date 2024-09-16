@@ -13,7 +13,7 @@
       </a></li>
     </ul> 
   </nav>
-  <div class="mainContainer">
+  <div class="routerContainer">
       <router-view></router-view>
   </div>
   <div class="resolutionInfo">
@@ -33,7 +33,11 @@ nav{
 }
 
 body {
-  font-family: 'Helvetica'
+  font-family: 'Helvetica';
+  background-image: url('@/assets/triangles_pattern.webp');
+  background-repeat: repeat;  
+  background-position: center; 
+  background-size: 72px 72px; 
 }
 
 #app {
@@ -101,10 +105,10 @@ li a:hover svg path {
 .resolutionInfo{
   display: none;
 }
-.mainContainer {
+.routerContainer {
   position: relative;
   max-width: 1200px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgb(0, 0, 0) 0px 5px 15px;
   margin: 0 auto;
   min-height: 800px;
   background-color: #752d2d;
@@ -112,11 +116,11 @@ li a:hover svg path {
   flex-direction: column; 
   align-items: center; 
   justify-content: center; 
-  overflow: hidden;
+  
 }
 /* Hide */
 @media only screen and (max-width: 767px) {
-  .mainContainer {
+  .routerContainer {
     display: none;
   }
   .resolutionInfo{

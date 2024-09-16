@@ -1,5 +1,5 @@
 <template>
-  <div class="mainContainer">
+  <div class="viewContainer">
     <div id="child1">
       <router-link :to="{ path: '/tracker', query: { data : this.sliderValueAmountInfo, years: this.sliderValueYearsInfo } }">
         <button>Jag vill förändra mitt liv nu!</button>
@@ -122,7 +122,7 @@ export default {
 </script>
 
 <style scoped>
-.mainContainer {
+.viewContainer {
   padding: 1rem;
   display: flex;
 }

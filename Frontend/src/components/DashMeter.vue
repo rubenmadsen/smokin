@@ -1,11 +1,13 @@
 <template>
     <div class="mainContainer">
-        <p>{{ money + " "}} </p>
-        <p>{{ moneyUnit }}</p>
-    </div>
-    <div class="mainContainer">
-        <p>{{ life + " "}} </p>
-        <p>{{ lifeUnit }}</p>
+        <div class="itemContainer">
+            <p>{{ money + " "}} </p>
+            <p>{{ moneyUnit }}</p>
+        </div>
+        <div class="itemContainer">
+            <p>{{ life + " "}} </p>
+            <p>{{ lifeUnit }}</p>
+        </div>
     </div>
   </template>
   
@@ -92,10 +94,12 @@
   
   <style scoped>
     .mainContainer{
-        position: relative;
+        margin: 0px;
+    }
+    .itemContainer{
         width: 150px;
         height: 150px;
-        background-color: rgba(255, 255, 255, 0.158);
+        background-color: rgba(255, 255, 255, 0.096);
     }
   </style>
   

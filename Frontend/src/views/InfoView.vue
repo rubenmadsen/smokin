@@ -121,7 +121,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .mainContainer {
   padding: 1rem;
   display: flex;

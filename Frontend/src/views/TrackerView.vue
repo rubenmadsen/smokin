@@ -106,7 +106,11 @@ export default {
 }
 
 .dashboard{
+  display: block;
+  margin:0px;
+  padding: 0px;
   border: solid 1px greenyellow;
   padding: 1rem;
+  
 }
 </style>

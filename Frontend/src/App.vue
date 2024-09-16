@@ -16,16 +16,21 @@
   <div class="mainContainer">
       <router-view></router-view>
   </div>
+  <div class="resolutionInfo">
+    <p>
+      NJET!
+    </p>
+  </div>
 </template>
 
 
+
 <style>
-* {
-  margin: 0;
-  padding: 0;
+
+nav{
+  z-index: 100000;
+  position:relative;
 }
-
-
 
 body {
   font-family: 'Helvetica'
@@ -41,7 +46,7 @@ body {
 
 .navbar {
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
 
 .icon-container {
@@ -68,6 +73,7 @@ ul {
   overflow: hidden;
   background-color:#303030;
   box-shadow: 0px 2px 7px 1px #000000;
+  
 }
 
 li {
@@ -92,12 +98,39 @@ li a:hover svg path {
 .home{
   padding: 1rem;
 }
-.mainContainer{
-  max-width: 1500px;
-  margin-inline: auto;
-  min-height:800px;
-  background-color: #752d2d;
+.resolutionInfo{
+  display: none;
 }
+.mainContainer {
+  position: relative;
+  max-width: 1200px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  margin: 0 auto;
+  min-height: 800px;
+  background-color: #752d2d;
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  overflow: hidden;
+}
+/* Hide */
+@media only screen and (max-width: 767px) {
+  .mainContainer {
+    display: none;
+  }
+  .resolutionInfo{
+    display: block;
+  }
+}
+
+/* Show 
+@media only screen and (min-width: 768px) {
+  .mainContainer {
+    display: flex; 
+  }
+}
+*/
 </style>
 
 

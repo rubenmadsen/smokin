@@ -82,7 +82,8 @@ namespace API.Manager {
                     userName TEXT,
                     consumableName TEXT,
                     date DATE,
-                    amount INTEGER
+                    amount INTEGER,
+                    primary key (userName, date) 
                         );";
 
                 using (var command = new SqliteCommand(createUserTableQuery, connection))

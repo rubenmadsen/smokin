@@ -1,9 +1,11 @@
 <template>
     <div class="mainContainer">
-        <p>{{ money + " kr" }}</p>
+        <p>{{ money + " "}} </p>
+        <p>{{ moneyUnit }}</p>
     </div>
     <div class="mainContainer">
-        {{ life + " min" }}
+        <p>{{ life + " "}} </p>
+        <p>{{ lifeUnit }}</p>
     </div>
   </template>
   
@@ -15,6 +17,8 @@
         return{
             money:0,
             life:0,
+            moneyUnit:"kr",
+            lifeUnit:"min",
             values:0,
             username:'ruben'
         }
@@ -53,6 +57,17 @@
             let diff = this.calculateDifferenceInDates(new Date(previous.date), new Date());
             totalRealPuffs += (diff * previous.amount);
             console.log("Actual puffs:" + totalRealPuffs);
+            let smokedCigarettes = (totalOriginalPuffs - totalRealPuffs) / 20;
+            let pacPrice = 67;
+            this.money = (pacPrice*(smokedCigarettes / 20));
+            this.life = smokedCigarettes * 11;
+            if (this.money > 1000)
+                this.moneyUnit = "tkr";
+            if (this.life > 60 * 24)
+                this.lifeUnit = "days";
+            else if (this.life > 60)
+                this.lifeUnit = "hours";
+
         },
         async getData(){
             try{

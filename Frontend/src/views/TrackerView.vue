@@ -1,4 +1,8 @@
 <template>
+  <div class="dashboard">
+    <DashMeter></DashMeter>
+  </div>
+
   <div class="sumContainer">
     <div class="child">
       <p>money</p>
@@ -23,8 +27,12 @@
 </template>
 
 <script>
+import DashMeter from '@/components/DashMeter.vue';
 export default {
   name: 'TrackerView',
+  components:{
+    DashMeter,
+  },
   props: {
     data: {
       type: String,
@@ -95,5 +103,10 @@ export default {
 
 .submitButton:hover {
   background-color: #2980b9;
+}
+
+.dashboard{
+  border: solid 1px greenyellow;
+  padding: 1rem;
 }
 </style>

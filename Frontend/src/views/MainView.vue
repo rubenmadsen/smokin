@@ -16,6 +16,7 @@
       </router-link>
     </div>
     <div id="child2">
+      <div class="inputContainer">
       <button
         class="button-custom-1"
         :class="{ 'button-pressed-1': selectedButton === 'Cigarette' }"
@@ -30,7 +31,8 @@
       >
         E-Cigarette
       </button>
-     
+      </div>
+      <div class="inputContainer">
       <input
         v-model="sliderValueAmount"
         type="range"
@@ -45,7 +47,8 @@
             : `You have smoked ${sliderValueAmount} E-Cigarettes`
         }}
       </p>
-
+      </div>
+      <div class="inputContainer">
       <input
         v-model="sliderValueYears"
         type="range"
@@ -54,6 +57,7 @@
         class="slider"
       />
       <p>You have smoked for {{ sliderValueYears }} years</p>
+      </div>
     </div>
     <div id="goBtn"></div>
   </div>
@@ -129,21 +133,28 @@ export default {
 <style scoped>
 .viewContainer {
   display: flex;
-  
   border-top: 1px solid var(--text-color);
   border-bottom: 1px solid var(--text-color);
   margin-top: 5rem;
   height: 500px;
 }
+.inputContainer{
+  text-align: center;
+}
 #child1 {
   background-color: var(--primary-color);
+  color: var(--text-color);
   flex: 1.2;
   padding: 1rem;
 }
 #child2 {
   flex: 1;
-  background-color: chartreuse;
+  background-color:var(--text-color);
+  color: var(--primary-color);
   padding: 1rem;
+}
+#child2 > div{
+  border: 1px dashed red;
 }
 #goBtn {
   display: inline;

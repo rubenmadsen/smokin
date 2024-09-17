@@ -1,6 +1,6 @@
 <template>
-  <div class="viewContainer">
-    <div id="child1">
+  <div class="ribbonContainer">
+    <div id="left">
       <router-link :to="{ path: '/tracker', query: { data : this.sliderValueAmountInfo, years: this.sliderValueYearsInfo } }">
         <button>Jag vill förändra mitt liv nu!</button>
       </router-link>
@@ -14,27 +14,31 @@
         />
       </div>
     </div>
-    <div id="child2">
+    <div id="right">
+      <div class="labelContainer">
       <h1 :style="{ color: 'white' }">
         Your life expecancy has decreased by
         {{ decreasedLifeExpectancy }} minutes.
       </h1>
       <h1 :style="{ color: 'white' }">You have spent {{ moneySpent }} SEK.</h1>
+      </div>
 
-      <button
-        class="button-custom-1"
-        :class="{ 'button-pressed-1': selectedButton === 'Cigarette' }"
-        @click="toggleButton('Cigarette')"
-      >
-        Cigarette
-      </button>
-      <button
-        class="button-custom-2"
-        :class="{ 'button-pressed-2': selectedButton === 'E-Cigarette' }"
-        @click="toggleButton('E-Cigarette')"
-      >
-        E-Cigarette
-      </button>
+      <div class="btnContainer">
+        <button
+          class="button-custom-1"
+          :class="{ 'button-pressed-1': selectedButton === 'Cigarette' }"
+          @click="toggleButton('Cigarette')"
+        >
+          Cigarette
+        </button>
+        <button
+          class="button-custom-2"
+          :class="{ 'button-pressed-2': selectedButton === 'E-Cigarette' }"
+          @click="toggleButton('E-Cigarette')"
+        >
+          E-Cigarette
+        </button>
+      </div>
 
       <input
         v-model="sliderValueAmountInfo"
@@ -271,13 +275,17 @@ export default {
   padding: 1rem;
   display: flex;
 }
-#child1 {
-  background-color: burlywood;
+#left {
   flex: 1.2;
+  padding: 1rem;
 }
-#child2 {
+#right {
   flex: 1;
-  background-color: chartreuse;
+  padding: 1rem;
+  background-color: var(--text-color);
+}
+#right > div{
+  border: 1px dotted red;
 }
 #goBtn {
   display: inline;

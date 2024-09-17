@@ -1,11 +1,9 @@
 <template>
   <div class="ribbonContainer">
-    <div id="child1">
-
+    <div id="left">
       <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }"
         ><h1 class="non-selectable">Jag vill veta mer hur rökning påverkar mig!!</h1></router-link
       >
-
       <h1 :style="{ color: 'white' }">
         Your life expecancy has decreased by
         {{ decreasedLifeExpectancy }} minutes.
@@ -15,48 +13,54 @@
         <button class="std-button">Jag vill förändra mitt liv nu!</button>
       </router-link>
     </div>
-    <div id="child2">
-      <div class="inputContainer">
-      <button
-        class="button-custom-1"
-        :class="{ 'button-pressed-1': selectedButton === 'Cigarette' }"
-        @click="toggleButton('Cigarette')"
-      >
-        Cigarette
-      </button>
-      <button
-        class="button-custom-2"
-        :class="{ 'button-pressed-2': selectedButton === 'E-Cigarette' }"
-        @click="toggleButton('E-Cigarette')"
-      >
-        E-Cigarette
-      </button>
+
+    
+    <div id="right">
+      <div class="labelContainer">
+          <p>Hur mycket har du bränt?</p>
       </div>
       <div class="inputContainer">
-      <input
-        v-model="sliderValueAmount"
-        type="range"
-        min="0"
-        max="50"
-        class="slider"
-      />
-      <p v-if="selectedButton">
-        {{
-          selectedButton === "Cigarette"
-            ? `You have smoked ${sliderValueAmount} Cigarettes`
-            : `You have smoked ${sliderValueAmount} E-Cigarettes`
-        }}
-      </p>
+        <button
+          class="button-custom-1"
+          :class="{ 'button-pressed-1': selectedButton === 'Cigarette' }"
+          @click="toggleButton('Cigarette')"
+        >
+          Cigarette
+        </button>
+        <button
+          class="button-custom-2"
+          :class="{ 'button-pressed-2': selectedButton === 'E-Cigarette' }"
+          @click="toggleButton('E-Cigarette')"
+        >
+          E-Cigarette
+        </button>
       </div>
       <div class="inputContainer">
-      <input
-        v-model="sliderValueYears"
-        type="range"
-        min="0"
-        max="50"
-        class="slider"
-      />
-      <p>You have smoked for {{ sliderValueYears }} years</p>
+        <p v-if="selectedButton">
+          {{
+            selectedButton === "Cigarette"
+              ? `You have smoked ${sliderValueAmount} Cigarettes`
+              : `You have smoked ${sliderValueAmount} E-Cigarettes`
+          }}
+        </p>
+        <input
+          v-model="sliderValueAmount"
+          type="range"
+          min="0"
+          max="50"
+          class="slider"
+        />
+        
+        </div>
+        <div class="inputContainer">
+        <p>How many years have you smoked for: {{ sliderValueYears }}</p>
+        <input
+          v-model="sliderValueYears"
+          type="range"
+          min="0"
+          max="50"
+          class="slider"
+        />
       </div>
     </div>
     <div id="goBtn"></div>
@@ -135,20 +139,21 @@ export default {
 .inputContainer{
   text-align: center;
 }
-#child1 {
+#left {
   background-color: var(--primary-color);
   color: var(--text-color);
   flex: 1.2;
   padding: 1rem;
 }
-#child2 {
+#right {
   flex: 1;
   background-color:var(--text-color);
   color: var(--primary-color);
   padding: 1rem;
 }
-#child2 > div{
+#right > div{
   border: 1px dashed red;
+  padding-bottom: 1rem;
 }
 #goBtn {
   display: inline;

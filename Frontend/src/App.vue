@@ -13,22 +13,36 @@
       </a></li>
     </ul> 
   </nav>
-  <div class="mainContainer">
+  <div class="routerContainer">
       <router-view></router-view>
+  </div>
+  <div class="resolutionInfo">
+    <p>Download the app version</p>
+    <a id="appstore_badge" href="https://apps.apple.com/app/idXXXXXXXXX" target="_blank" rel="noopener noreferrer">
+      <img src="@/assets/appstore.png" alt="Download on the App Store" />
+    </a>
+    
+    <!-- Link to the Google Play Store -->
+    <a id="googleplay_badge" href="https://play.google.com/store/apps/details?id=XXXXXXXXX" target="_blank" rel="noopener noreferrer">
+      <img src="@/assets/googleplay.png" alt="Get it on Google Play" />
+    </a>
   </div>
 </template>
 
-
 <style>
-* {
-  margin: 0;
-  padding: 0;
+
+nav{
+  z-index: 100000;
+  position:relative;
 }
 
-
-
 body {
-  font-family: 'Helvetica'
+  font-family: 'Helvetica';
+  background-image: url('@/assets/triangles_pattern.webp');
+  background-repeat: repeat;  
+  background-position: center; 
+  background-size: 36px 36px; 
+  height: 100%;
 }
 
 #app {
@@ -41,7 +55,7 @@ body {
 
 .navbar {
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
 
 .icon-container {
@@ -67,7 +81,8 @@ ul {
   padding: 0;
   overflow: hidden;
   background-color:#303030;
-  box-shadow: 0px 2px 7px 1px #000000;
+  box-shadow: 0px 2px 7px 1px var(--strong-shadow);
+  
 }
 
 li {
@@ -89,15 +104,53 @@ li a:hover svg path {
   fill: rgb(162, 177, 26);
 }
 
+
+
 .home{
   padding: 1rem;
 }
-.mainContainer{
-  max-width: 1500px;
-  margin-inline: auto;
-  min-height:800px;
-  background-color: #752d2d;
+.resolutionInfo{
+  padding: 1rem;
+  display: none;
+  text-align: center;
+  justify-content: center;
 }
+.resolutionInfo img{
+  height: 48px;
+  margin: 0.2rem;
+}
+.resolutionInfo p{
+  margin-bottom: 1rem;
+}
+.routerContainer {
+  position: relative;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column; 
+
+  margin: 0 auto;
+  min-height: calc(100vh - 71px);
+  box-shadow: var(--strong-shadow) 0px 5px 15px;
+  background-color: var(--background-color);
+}
+
+/* Hide */
+@media only screen and (max-width: 767px) {
+  .routerContainer {
+    display: none;
+  }
+  .resolutionInfo{
+    display: block;
+  }
+}
+
+/* Show 
+@media only screen and (min-width: 768px) {
+  .mainContainer {
+    display: flex; 
+  }
+}
+*/
 </style>
 
 

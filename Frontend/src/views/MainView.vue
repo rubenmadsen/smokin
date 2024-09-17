@@ -1,9 +1,9 @@
 <template>
-  <div class="mainContainer">
+  <div class="viewContainer">
     <div id="child1">
-      <input v-model="inputData" placeholder="Enter something" />
+
       <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }"
-        ><h1>Jag vill veta mer hur rökning påverkar mig!!</h1></router-link
+        ><h1 class="non-selectable">Jag vill veta mer hur rökning påverkar mig!!</h1></router-link
       >
 
       <h1 :style="{ color: 'white' }">
@@ -11,11 +11,12 @@
         {{ decreasedLifeExpectancy }} minutes.
       </h1>
       <h1 :style="{ color: 'white' }">You have spent {{ moneySpent }} SEK.</h1>
-      <router-link :to="{ path: '/tracker', query: { data: inputData } }">
-        <button>Jag vill förändra mitt liv nu!</button>
+      <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
+        <button class="std-button">Jag vill förändra mitt liv nu!</button>
       </router-link>
     </div>
     <div id="child2">
+      <div class="inputContainer">
       <button
         class="button-custom-1"
         :class="{ 'button-pressed-1': selectedButton === 'Cigarette' }"
@@ -30,7 +31,8 @@
       >
         E-Cigarette
       </button>
-     
+      </div>
+      <div class="inputContainer">
       <input
         v-model="sliderValueAmount"
         type="range"
@@ -45,7 +47,8 @@
             : `You have smoked ${sliderValueAmount} E-Cigarettes`
         }}
       </p>
-
+      </div>
+      <div class="inputContainer">
       <input
         v-model="sliderValueYears"
         type="range"
@@ -54,6 +57,7 @@
         class="slider"
       />
       <p>You have smoked for {{ sliderValueYears }} years</p>
+      </div>
     </div>
     <div id="goBtn"></div>
   </div>
@@ -108,6 +112,15 @@ export default {
         },
       };
     },
+    trackerLink(){
+      return {
+        path: "/tracker",
+        query: {
+          data: this.sliderValueAmount ,
+          years: this.sliderValueYears,
+        },
+      }
+    }
   },
   mounted() {
     console.log('Query Params:', this.$route.query);
@@ -118,17 +131,30 @@ export default {
 </script>
 
 <style scoped>
-.mainContainer {
-  padding: 1rem;
+.viewContainer {
   display: flex;
+  border-top: 1px solid var(--text-color);
+  border-bottom: 1px solid var(--text-color);
+  margin-top: 5rem;
+  height: 500px;
+}
+.inputContainer{
+  text-align: center;
 }
 #child1 {
-  background-color: burlywood;
+  background-color: var(--primary-color);
+  color: var(--text-color);
   flex: 1.2;
+  padding: 1rem;
 }
 #child2 {
   flex: 1;
-  background-color: chartreuse;
+  background-color:var(--text-color);
+  color: var(--primary-color);
+  padding: 1rem;
+}
+#child2 > div{
+  border: 1px dashed red;
 }
 #goBtn {
   display: inline;

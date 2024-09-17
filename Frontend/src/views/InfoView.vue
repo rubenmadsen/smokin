@@ -1,7 +1,7 @@
 <template>
-  <div class="mainContainer">
+  <div class="viewContainer">
     <div id="child1">
-      <router-link :to="{ path: '/tracker', query: { data: inputData } }">
+      <router-link :to="{ path: '/tracker', query: { data : this.sliderValueAmountInfo, years: this.sliderValueYearsInfo } }">
         <button>Jag vill förändra mitt liv nu!</button>
       </router-link>
       <div id="app">
@@ -248,14 +248,20 @@ export default {
       );
     },
   },
-  mounted: function () {
-    this.getData("cig");
-  },
+  trackerLink(){
+      return {
+        path: "/tracker",
+        query: {
+          data: this.sliderValueAmount ,
+          years: this.sliderValueYears,
+        },
+      }
+    }
 };
 </script>
 
-<style>
-.mainContainer {
+<style scoped>
+.viewContainer {
   padding: 1rem;
   display: flex;
 }

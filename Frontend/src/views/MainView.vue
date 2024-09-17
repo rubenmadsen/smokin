@@ -128,8 +128,11 @@ export default {
 
 <style scoped>
 .viewContainer {
-  padding: 1rem;
   display: flex;
+  border-top: 1px solid var(--text-color);
+  border-bottom: 1px solid var(--text-color);
+  margin-top: 5rem;
+  height: 500px;
 }
 #child1 {
   background-color: burlywood;

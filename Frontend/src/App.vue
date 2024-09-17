@@ -17,13 +17,17 @@
       <router-view></router-view>
   </div>
   <div class="resolutionInfo">
-    <p>
-      NJET!
-    </p>
+    <p>Download the app version</p>
+    <a id="appstore_badge" href="https://apps.apple.com/app/idXXXXXXXXX" target="_blank" rel="noopener noreferrer">
+      <img src="@/assets/appstore.png" alt="Download on the App Store" />
+    </a>
+    
+    <!-- Link to the Google Play Store -->
+    <a id="googleplay_badge" href="https://play.google.com/store/apps/details?id=XXXXXXXXX" target="_blank" rel="noopener noreferrer">
+      <img src="@/assets/googleplay.png" alt="Get it on Google Play" />
+    </a>
   </div>
 </template>
-
-
 
 <style>
 
@@ -37,7 +41,7 @@ body {
   background-image: url('@/assets/triangles_pattern.webp');
   background-repeat: repeat;  
   background-position: center; 
-  background-size: 72px 72px; 
+  background-size: 36px 36px; 
   height: 100%;
 }
 
@@ -104,7 +108,17 @@ li a:hover svg path {
   padding: 1rem;
 }
 .resolutionInfo{
+  padding: 1rem;
   display: none;
+  text-align: center;
+  justify-content: center;
+}
+.resolutionInfo img{
+  height: 48px;
+  margin: 0.2rem;
+}
+.resolutionInfo p{
+  margin-bottom: 1rem;
 }
 .routerContainer {
   position: relative;
@@ -115,7 +129,7 @@ li a:hover svg path {
   margin: 0 auto;
   min-height: calc(100vh - 71px);
   box-shadow: var(--strong-shadow) 0px 5px 15px;
-  background-color: #752d2d;
+  background-color: var(--background-color);
 }
 
 /* Hide */

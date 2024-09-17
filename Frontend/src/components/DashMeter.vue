@@ -1,12 +1,12 @@
 <template>
-    <div class="mainContainer">
+    <div class="mainContainer non-selectable">
         <div class="itemContainer">
-            <p>{{ money + " "}} </p>
-            <p>{{ moneyUnit }}</p>
+            <p class="value">{{ money + " "}} </p>
+            <p class="unit">{{ moneyUnit }}</p>
         </div>
-        <div class="itemContainer">
-            <p>{{ life + " "}} </p>
-            <p>{{ lifeUnit }}</p>
+        <div class="itemContainer non-selectable">
+            <p class="value">{{ life + " "}} </p>
+            <p class="unit">{{ lifeUnit }}</p>
         </div>
     </div>
   </template>
@@ -69,6 +69,8 @@
                 this.lifeUnit = "days";
             else if (this.life > 60)
                 this.lifeUnit = "hours";
+            this.money = Math.round(this.money);
+            this.life = Math.round(this.life);
 
         },
         async getData(){
@@ -95,11 +97,29 @@
   <style scoped>
     .mainContainer{
         margin: 0px;
+        text-align: center;
     }
     .itemContainer{
+        position: relative;
+        display: inline-block;
+        border: 5px solid var(--primary-color);
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        margin:auto;
         width: 150px;
         height: 150px;
-        background-color: rgba(255, 255, 255, 0.096);
+        background-color: var(--text-color);
+        color: var(--background-color);
+        border-radius: 999px;
+        margin: 0.5rem;
+    }
+    .value{
+        font-family: var(--font-family-serif);
+        font-size: 4em;
+    }
+    .unit{
+        font-family: var(--font-family-sans);
     }
   </style>
   

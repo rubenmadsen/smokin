@@ -1,14 +1,40 @@
 
 :root {
-    --primary-color: #5E5DF0;
-    --secondary-color: #42b983;
-    --background-color: #f5f5f5;
+    --primary-color: #3498db;         /* Main theme color */
+    --secondary-color: #2ecc71;       /* Secondary theme color */
+    --accent-color: #e74c3c;          /* Accent color */
+    --background-color: #f5f5f5;      /* Background color */
+    --text-color: #2c3e50;            /* Main text color */
+    --muted-text-color: #7f8c8d;      /* Muted text for less emphasis */
+    --border-color: #dcdcdc;          /* Border color */
+    --link-color: #2980b9;            /* Color for links */
+
+    --error-color: #e74c3c;           /* Error state */
+    --success-color: #27ae60;         /* Success state */
+    --warning-color: #f39c12;         /* Warning state */
+
     --text-color: #2c3e50;
     --highlight-color: #ffcc00;
-    --error-color: #e74c3c;
+
+    --weak-shadow: rgba(0, 0, 0, 0.322);
     --strong-shadow: rgba(0, 0, 0, 0.63);
     --weak-highlight: rgb(201, 201, 201);
     --strong-highlight: rgb(243, 243, 243);
+
+    /* typography */
+    --font-family-sans: 'Helvetica', 'Arial', sans-serif;   /* Default font family */
+    --font-family-serif: 'Georgia', serif;                  /* Serif font */
+    --font-size-base: 16px;                                 /* Base font size */
+    --font-size-large: 1.25rem;                             /* Large text size */
+    --font-size-small: 0.875rem;                            /* Small text size */
+    --font-weight-normal: 400;                              /* Normal font weight */
+    --font-weight-bold: 700;                                /* Bold font weight */
+    --line-height: 1.6;                                     /* Default line height */
+    --heading-font-size: 2rem;                              /* Font size for headings */
+    /*
+    --telia-font: TeliaSansHeading,Helvetica,Arial,"Lucida Grande",sans-serif;
+    --button-font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+    */
     }
 
 * {
@@ -23,11 +49,11 @@
     user-select: none; 
   }
 .std-button{
-    background: var(--primary-color);
+    background: var(--background-color);
     border-radius: 999px;
     box-shadow: #5E5DF0 0 10px 20px -10px;
     box-sizing: border-box;
-    color: #FFFFFF;
+    color: var(--primary-color);
     cursor: pointer;
     font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
     font-size: 16px;

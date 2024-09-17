@@ -3,7 +3,7 @@
     <div id="child1">
 
       <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }"
-        ><h1>Jag vill veta mer hur rökning påverkar mig!!</h1></router-link
+        ><h1 class="non-selectable">Jag vill veta mer hur rökning påverkar mig!!</h1></router-link
       >
 
       <h1 :style="{ color: 'white' }">
@@ -129,18 +129,21 @@ export default {
 <style scoped>
 .viewContainer {
   display: flex;
+  
   border-top: 1px solid var(--text-color);
   border-bottom: 1px solid var(--text-color);
   margin-top: 5rem;
   height: 500px;
 }
 #child1 {
-  background-color: burlywood;
+  background-color: var(--primary-color);
   flex: 1.2;
+  padding: 1rem;
 }
 #child2 {
   flex: 1;
   background-color: chartreuse;
+  padding: 1rem;
 }
 #goBtn {
   display: inline;

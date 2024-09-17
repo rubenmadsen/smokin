@@ -1,18 +1,9 @@
 <template>
+  <div class="mainContainer">
   <div class="dashboard">
     <DashMeter></DashMeter>
   </div>
 
-  <div class="sumContainer">
-    <div class="child">
-      <p>money</p>
-      <p>{{ numberOfCig }}</p>
-      <p>{{ yearsOfSmoking }}</p>
-    </div>
-    <div class="child">
-      <p>time</p>
-    </div>
-  </div>
   <div>
     <h2>Graph</h2>
   </div>
@@ -39,6 +30,7 @@
 
     <button @click="handleSubmit" class="submitButton">Submit</button>
   </div>
+</div>
 </template>
 
 <script>
@@ -104,18 +96,9 @@ export default {
 </script>
 
 <style scoped>
-.sumContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-.child {
-  width: 150px;
-  height: 150px;
-  background-color: blueviolet;
-}
-.sumContainer last-child {
-  background-color: aqua;
+.mainContainer > div{
+  display: block;
+  border: 1px dashed red;
 }
 
 .sliderContainer {

@@ -104,6 +104,8 @@ li a:hover svg path {
   fill: rgb(162, 177, 26);
 }
 
+
+
 .home{
   padding: 1rem;
 }

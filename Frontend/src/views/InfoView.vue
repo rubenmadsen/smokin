@@ -225,6 +225,7 @@ export default {
     },
   },
   computed: {
+      
     receivedData() {
       return this.$route.query.data || "No data received";
     },
@@ -248,6 +249,11 @@ export default {
       );
     },
   },
+
+  mounted: function () {
+    this.getData("cig");
+  },
+  
   trackerLink(){
       return {
         path: "/tracker",

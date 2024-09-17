@@ -3,35 +3,35 @@
     <div class="dashboard">
     <DashMeter></DashMeter>
   </div>
-  </div>
-  <div class="ribbonContainer mainContainer">
   
+  <div class="ribbonContainer ">
+    <div class="graphContainer">
+      <h2>Moas brutalt feta graf</h2>
+    </div>
 
-  <div>
-    <h2>Graph</h2>
-  </div>
-
-  <div class="sliderContainer">
-    <button
-        class="button-custom-1"
-        :class="{ 'button-pressed-1': selectedButton === 'Cigarette' }"
-        @click="toggleButton('Cigarette')"
-      >
-        Cigarette
-      </button>
+    <div class="sliderContainer">
+      <div class="buttonContainer">
       <button
-        class="button-custom-2"
-        :class="{ 'button-pressed-2': selectedButton === 'E-Cigarette' }"
-        @click="toggleButton('E-Cigarette')"
-      >
-        E-Cigarette
-      </button>
+          class="button-custom-1"
+          :class="{ 'button-pressed-1': selectedButton === 'Cigarette' }"
+          @click="toggleButton('Cigarette')"
+        >
+          Cigarette
+        </button>
+        <button
+          class="button-custom-2"
+          :class="{ 'button-pressed-2': selectedButton === 'E-Cigarette' }"
+          @click="toggleButton('E-Cigarette')"
+        >
+          E-Cigarette
+        </button>
+      </div>
+      <p>How many {{ this.selectedButton.toLowerCase() + "s" }} did you smoke today?</p>
+      <input v-model="sliderValue" type="range" min="0" max="100" class="slider" />
+      <p>{{ sliderValue + " " + this.selectedButton.toLowerCase() + "s"}}</p>
 
-    <p>How many cigarettes/e-cigarettes did you smoke today?</p>
-    <input v-model="sliderValue" type="range" min="0" max="100" class="slider" />
-    <p>{{ sliderValue }} cigarettes/e-cigarettes</p>
-
-    <button @click="handleSubmit" class="submitButton">Submit</button>
+      <button @click="handleSubmit" class="submitButton">Submit</button>
+    </div>
   </div>
 </div>
 </template>
@@ -101,23 +101,33 @@ export default {
 <style scoped>
 .ribbonContainer {
   margin-top:0px;
+  flex-direction: column;
+}
+.ribbonContainer > div{
+  margin-top: 1rem;
 }
 .mainContainer > div{
   margin-top: 0;
 }
-
-.sliderContainer {
-
+.graphContainer{
+  border: 1px dotted red;
   text-align: center;
-  display: flex;
+}
+.sliderContainer {
+  text-align: center;
+  display: inline;
   align-items: center;
 }
-
+.sliderContainer > * {
+  margin-top: 1rem;
+}
 .slider {
   width: 80%;
   margin-right: 20px;
 }
-
+.buttonContainer{
+  
+}
 .submitButton {
   padding: 10px 20px;
   background-color: #3498db;

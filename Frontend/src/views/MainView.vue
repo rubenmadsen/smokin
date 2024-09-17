@@ -1,5 +1,5 @@
 <template>
-  <div class="viewContainer">
+  <div class="ribbonContainer">
     <div id="child1">
 
       <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }"
@@ -131,13 +131,7 @@ export default {
 </script>
 
 <style scoped>
-.viewContainer {
-  display: flex;
-  border-top: 1px solid var(--text-color);
-  border-bottom: 1px solid var(--text-color);
-  margin-top: 5rem;
-  height: 500px;
-}
+
 .inputContainer{
   text-align: center;
 }

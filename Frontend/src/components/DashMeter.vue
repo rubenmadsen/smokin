@@ -98,6 +98,7 @@
     .mainContainer{
         margin: 0px;
         text-align: center;
+        height: 150px;
     }
     .itemContainer{
         position: relative;
@@ -107,8 +108,8 @@
         align-content: center;
         justify-content: center;
         margin:auto;
-        width: 150px;
-        height: 150px;
+        aspect-ratio: 1;
+        height: 100%;
         background-color: var(--text-color);
         color: var(--background-color);
         border-radius: 999px;

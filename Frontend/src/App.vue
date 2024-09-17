@@ -105,7 +105,14 @@ li a:hover svg path {
 }
 
 
-
+.ribbonContainer {
+  display: flex;
+  border-top: 1px solid var(--text-color);
+  border-bottom: 1px solid var(--text-color);
+  margin-top: 150px;
+  height: 500px;
+  background-color: var(--primary-color);
+}
 .home{
   padding: 1rem;
 }

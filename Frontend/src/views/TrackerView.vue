@@ -1,8 +1,11 @@
 <template>
-  <div class="mainContainer">
-  <div class="dashboard">
+  <div>
+    <div class="dashboard">
     <DashMeter></DashMeter>
   </div>
+  </div>
+  <div class="ribbonContainer mainContainer">
+  
 
   <div>
     <h2>Graph</h2>
@@ -75,7 +78,7 @@ export default {
     handleSubmit() {
       // Create formData object
       let formData = new FormData();
-      formData.append('userName', 'Ruben'); // Example username
+      formData.append('userName', 'ruben'); // Example username
       formData.append('consumableName', this.selectedButton === 'Cigarette' ? 'cig' : 'e-cig'); // Example consumable type  === 'Cigarette' ? 'cig' : 'e-cig'
       formData.append('date', new Date().toISOString().split('T')[0]); // Today's date
       formData.append('amount', this.sliderValue); // Number of cigarettes from the slider
@@ -96,13 +99,15 @@ export default {
 </script>
 
 <style scoped>
+.ribbonContainer {
+  margin-top:0px;
+}
 .mainContainer > div{
-  display: block;
-  border: 1px dashed red;
+  margin-top: 0;
 }
 
 .sliderContainer {
-  margin-top: 20px;
+
   text-align: center;
   display: flex;
   align-items: center;
@@ -132,8 +137,6 @@ export default {
   display: block;
   margin:0px;
   padding: 0px;
-  border: solid 1px greenyellow;
-  padding: 1rem;
   
 }
 

@@ -38,6 +38,7 @@ body {
   background-repeat: repeat;  
   background-position: center; 
   background-size: 72px 72px; 
+  height: 100%;
 }
 
 #app {
@@ -76,7 +77,7 @@ ul {
   padding: 0;
   overflow: hidden;
   background-color:#303030;
-  box-shadow: 0px 2px 7px 1px #000000;
+  box-shadow: 0px 2px 7px 1px var(--strong-shadow);
   
 }
 
@@ -108,16 +109,15 @@ li a:hover svg path {
 .routerContainer {
   position: relative;
   max-width: 1200px;
-  box-shadow: rgb(0, 0, 0) 0px 5px 15px;
-  margin: 0 auto;
-  min-height: 800px;
-  background-color: #752d2d;
   display: flex;
   flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  
+
+  margin: 0 auto;
+  min-height: calc(100vh - 71px);
+  box-shadow: var(--strong-shadow) 0px 5px 15px;
+  background-color: #752d2d;
 }
+
 /* Hide */
 @media only screen and (max-width: 767px) {
   .routerContainer {

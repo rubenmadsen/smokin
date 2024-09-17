@@ -12,7 +12,7 @@
       </h1>
       <h1 :style="{ color: 'white' }">You have spent {{ moneySpent }} SEK.</h1>
       <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
-        <button>Jag vill förändra mitt liv nu!</button>
+        <button class="std-button">Jag vill förändra mitt liv nu!</button>
       </router-link>
     </div>
     <div id="child2">

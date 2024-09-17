@@ -40,29 +40,32 @@
         </button>
       </div>
 
-      <input
-        v-model="sliderValueAmountInfo"
-        type="range"
-        min="0"
-        max="50"
-        class="slider"
-      />
-      <p v-if="selectedButton">
-        {{
-          selectedButton === "Cigarette"
-            ? `You have smoked ${sliderValueAmountInfo} Cigarettes`
-            : `You have smoked ${sliderValueAmountInfo} E-Cigarettes`
-        }}
-      </p>
-
-      <input
-        v-model="sliderValueYearsInfo"
-        type="range"
-        min="0"
-        max="50"
-        class="slider"
-      />
-      <p>You have smoked for {{ sliderValueYearsInfo }} years</p>
+      <div class="sliderContainer">
+        <p v-if="selectedButton">
+          {{
+            selectedButton === "Cigarette"
+              ? `You have smoked ${sliderValueAmountInfo} Cigarettes`
+              : `You have smoked ${sliderValueAmountInfo} E-Cigarettes`
+          }}
+        </p>
+        <input
+          v-model="sliderValueAmountInfo"
+          type="range"
+          min="0"
+          max="50"
+          class="slider"
+        />
+        
+        <p>You have smoked for {{ sliderValueYearsInfo }} years</p>
+        <input
+          v-model="sliderValueYearsInfo"
+          type="range"
+          min="0"
+          max="50"
+          class="slider"
+        />
+        
+      </div>
     </div>
     <div id="goBtn"></div>
   </div>
@@ -283,9 +286,20 @@ export default {
   flex: 1;
   padding: 1rem;
   background-color: var(--text-color);
+  text-align: left;
 }
 #right > div{
   border: 1px dotted red;
+  padding-bottom: 1rem;
+}
+.labelContainer{
+
+}
+.btnContainer{
+
+}
+.sliderContainer{
+  color: var(--primary-color);
 }
 #goBtn {
   display: inline;

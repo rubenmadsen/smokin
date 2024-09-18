@@ -118,9 +118,12 @@
     .value{
         font-family: var(--font-family-serif);
         font-size: 4em;
+        color: var(--background-color);
     }
     .unit{
         font-family: var(--font-family-sans);
+        color: var(--background-color);
+
     }
   </style>
   

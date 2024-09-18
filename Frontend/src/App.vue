@@ -104,6 +104,10 @@ li a:hover svg path {
   fill: rgb(162, 177, 26);
 }
 
+h1, h2, h3, h4, h5, h6, p, span {
+  color: var(--text-color);
+}
+
 
 .ribbonContainer {
   display: flex;
@@ -111,7 +115,6 @@ li a:hover svg path {
   border-bottom: 1px solid var(--text-color);
   margin-top: 150px;
   height: 500px;
-  background-color: var(--text-color);
 }
 .home{
   padding: 1rem;
@@ -138,7 +141,7 @@ li a:hover svg path {
   margin: 0 auto;
   min-height: calc(100vh - 71px);
   box-shadow: var(--strong-shadow) 0px 5px 15px;
-  background-color: var(--text-color);
+  background-color: var(--background-color);
 }
 
 /* Hide */

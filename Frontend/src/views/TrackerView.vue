@@ -30,7 +30,7 @@
       <input v-model="sliderValue" type="range" min="0" max="100" class="slider" />
       <p>{{ sliderValue + " " + this.selectedButton.toLowerCase() + "s"}}</p>
 
-      <button @click="handleSubmit" class="submitButton">Submit</button>
+      <button  @click="handleSubmit" class="std-button">Submit</button>
     </div>
   </div>
 </div>
@@ -127,6 +127,9 @@ export default {
 }
 .buttonContainer{
   
+}
+.buttonContainer button{
+  margin: 0.5rem;
 }
 .submitButton {
   padding: 10px 20px;

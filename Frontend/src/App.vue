@@ -80,7 +80,7 @@ ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color:#303030;
+  background-color: var(--nav-color);
   box-shadow: 0px 2px 7px 1px var(--strong-shadow);
   
 }
@@ -100,8 +100,8 @@ li a {
 }
 
 li a:hover svg path {
-  stroke: rgb(162, 177, 26);
-  fill: rgb(162, 177, 26);
+  stroke: var(--primary-color);
+  fill: var(--primary-color);
 }
 
 h1, h2, h3, h4, h5, h6, p, span {

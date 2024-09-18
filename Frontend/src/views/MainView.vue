@@ -24,9 +24,9 @@
         ><h1 class="non-selectable">Jag vill veta mer hur rökning påverkar mig!!</h1></router-link
         >
       
-      <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
-        <button class="std-button">Let's go!</button>
-      </router-link>
+      <!-- <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }"> -->
+        <button @click="handleSubmit" class="std-button">Let's go!</button>
+      <!-- </router-link> -->
       </div>
     </div>
 
@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import Backend from '@/services/backend.js';
+
 export default {
   name: "MainView",
   data() {
@@ -102,6 +104,23 @@ export default {
       this.reduceLifeRate = this.selectedButton === "Cigarette" ? 11 : 9;
       this.moneySpendingRate = this.selectedButton === "Cigarette" ? 4 : 2;
     },
+    async handleSubmit() {
+    let formData = new FormData();
+    formData.append('userName', 'ruben');
+    formData.append('consumableName', this.selectedButton === 'Cigarette' ? 'cig' : 'e-cig');
+    formData.append('date', this.dateAfterSubtractingYears);
+    formData.append('amount', this.sliderValueAmount);
+
+    try {
+      const response = await Backend.postNewUserTrackingData(formData);
+      console.log("Data successfully submitted:", response);
+      // alert("Data successfully submitted!");
+      this.$router.push({ path: '/tracker', query: { data: this.sliderValueAmount, years: this.sliderValueYears } });
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      alert("Error: You have already submitted data for today!");
+    }
+  }
   },
   computed: {
     decreasedLifeExpectancy() {
@@ -140,7 +159,13 @@ export default {
           years: this.sliderValueYears,
         },
       }
-    }
+    },
+    dateAfterSubtractingYears() {
+      const currentDate = new Date(); // Get the current date
+      const newYear = currentDate.getFullYear() - this.sliderValueYears; // Subtract the years
+      currentDate.setFullYear(newYear); // Set the new year to the date
+      return currentDate.toISOString().split('T')[0]; // Format the date as YYYY-MM-DD
+    },
   },
   mounted() {
     console.log('Query Params:', this.$route.query);

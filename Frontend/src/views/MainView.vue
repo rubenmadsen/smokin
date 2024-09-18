@@ -181,20 +181,21 @@ export default {
   text-align: center;
 }
 #left {
-  background-color: var(--primary-color);
   color: var(--text-color);
   flex: 1.2;
   padding: 1rem;
 }
 #right {
   flex: 1;
-  background-color:var(--text-color);
   color: var(--primary-color);
   padding: 1rem;
 }
 #right > div{
   border: var(--border);
   padding-bottom: 1rem;
+}
+#right > p{
+  text-align: left;
 }
 #goBtn {
   display: inline;

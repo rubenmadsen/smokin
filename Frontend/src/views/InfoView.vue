@@ -1,7 +1,15 @@
 <template>
   <div class="ribbonContainer">
     <div id="left">
-      <router-link :to="{ path: '/tracker', query: { data : this.sliderValueAmountInfo, years: this.sliderValueYearsInfo } }">
+      <router-link
+        :to="{
+          path: '/tracker',
+          query: {
+            data: this.sliderValueAmountInfo,
+            years: this.sliderValueYearsInfo,
+          },
+        }"
+      >
         <button>Jag vill förändra mitt liv nu!</button>
       </router-link>
       <div id="app">
@@ -10,17 +18,18 @@
           id="my-chart-id"
           :options="chartOptions"
           :data="chartData"
-        
         />
       </div>
     </div>
     <div id="right">
       <div class="labelContainer">
-      <h1 :style="{ color: 'white' }">
-        Your life expecancy has decreased by
-        {{ decreasedLifeExpectancy }} minutes.
-      </h1>
-      <h1 :style="{ color: 'white' }">You have spent {{ moneySpent }} SEK.</h1>
+        <h1 :style="{ color: 'white' }">
+          Your life expecancy has decreased by
+          {{ decreasedLifeExpectancy }} minutes.
+        </h1>
+        <h1 :style="{ color: 'white' }">
+          You have spent {{ moneySpent }} SEK.
+        </h1>
       </div>
 
       <div class="btnContainer">
@@ -55,7 +64,7 @@
           max="50"
           class="slider"
         />
-        
+
         <p>You have smoked for {{ sliderValueYearsInfo }} years</p>
         <input
           v-model="sliderValueYearsInfo"
@@ -64,7 +73,6 @@
           max="50"
           class="slider"
         />
-        
       </div>
     </div>
     <div id="goBtn"></div>
@@ -100,7 +108,7 @@ const URL_FOR_LOCAL_HOST = "https://localhost:7197/api/TodoApp/";
 
 export default {
   name: "InfoView",
- 
+
   components: {
     Bar,
   },
@@ -131,54 +139,59 @@ export default {
         datasets: [{ data: [] }],
       },
       chartOptions: {
-  responsive: true,
-  plugins: {
-    legend: { display: false },
-    tooltip: {
-      callbacks: {
-        label: function(context) {
-          return context.dataset.label + ': ' + context.raw;
-        }
-      }
-    }
-  },
-  scales: {
-    x: {
-      display: true, // Ensure x-axis is displayed
-      title: {
-        display: true,
-      
+       
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                return context.dataset.label + ": " + context.raw;
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            display: true, // Ensure x-axis is displayed
+            title: {
+              display: true,
+            },
+            ticks: {
+              autoSkip: false, // Ensure all labels are shown
+              maxRotation: 90, // Rotate labels if necessary
+              minRotation:70,
+              font: {
+                        size: 16
+                    }
+            },
+            grid: {
+              display: false, // Hide grid lines if not needed
+            },
+          },
+          y: {
+            display: true,
+            beginAtZero: true,
+            type: "logarithmic", // Assuming you need logarithmic scale
+            grid: {
+              display: true,
+              drawBorder: false,
+            },
+            ticks: {
+              maxTicksLimit: 15,
+              callback: function (value) {
+                if (Math.abs(value) < 1) {
+                  return Math.abs(value) < 0.01
+                    ? value.toExponential(0)
+                    : value.toFixed(2);
+                } else {
+                  return Math.round(value).toString();
+                }
+              },
+            },
+          },
+        },
       },
-      ticks: {
-        autoSkip: false, // Ensure all labels are shown
-        maxRotation: 90, // Rotate labels if necessary
-        minRotation: 0
-      },
-      grid: {
-        display: false // Hide grid lines if not needed
-      }
-    },
-    y: {
-      display: true,
-      beginAtZero: true,
-      type: 'logarithmic', // Assuming you need logarithmic scale
-      grid: {
-        display: true,
-        drawBorder: false
-      },
-      ticks: {
-        maxTicksLimit: 15,
-        callback: function(value) {
-          if (Math.abs(value) < 1) {
-            return Math.abs(value) < 0.01 ? value.toExponential(0) : value.toFixed(2);
-          } else {
-            return Math.round(value).toString();
-          }
-        }
-      }
-    }
-  }
-},
     };
   },
 
@@ -200,7 +213,7 @@ export default {
         const response = await axios.get(
           URL_FOR_LOCAL_HOST +
             "GetSubstancesAndConcentrations/" +
-            cigarrette_type 
+            cigarrette_type
         );
         // Make the API call
 
@@ -210,8 +223,8 @@ export default {
         const toxinNames = toxins.map((toxin) => toxin.toxinName);
         const amounts = toxins.map((toxin) => parseFloat(toxin.amount)); // Ensure amounts are floats
 
-        console.log('toxinNames'+toxinNames);
-        console.log('amount'+amounts);
+        console.log("toxinNames" + toxinNames);
+        console.log("amount" + amounts);
 
         // Set chartData
         this.chartData = {
@@ -224,7 +237,6 @@ export default {
           ],
         };
         // Return the transformed list
-       
       } catch (error) {
         console.error("Error fetching data:", error);
         this.fetchError = true;
@@ -232,7 +244,6 @@ export default {
     },
   },
   computed: {
-      
     receivedData() {
       return this.$route.query.data || "No data received";
     },
@@ -260,16 +271,16 @@ export default {
   mounted: function () {
     this.getData("cig");
   },
-  
-  trackerLink(){
-      return {
-        path: "/tracker",
-        query: {
-          data: this.sliderValueAmount ,
-          years: this.sliderValueYears,
-        },
-      }
-    }
+
+  trackerLink() {
+    return {
+      path: "/tracker",
+      query: {
+        data: this.sliderValueAmount,
+        years: this.sliderValueYears,
+      },
+    };
+  },
 };
 </script>
 
@@ -288,17 +299,15 @@ export default {
   background-color: var(--text-color);
   text-align: left;
 }
-#right > div{
+#right > div {
   border: 1px dotted red;
   padding-bottom: 1rem;
 }
-.labelContainer{
-
+.labelContainer {
 }
-.btnContainer{
-
+.btnContainer {
 }
-.sliderContainer{
+.sliderContainer {
   color: var(--primary-color);
 }
 #goBtn {

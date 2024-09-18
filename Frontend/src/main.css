@@ -1,5 +1,8 @@
 
 :root {
+    /* heler */
+    --helper-border: 1px dotted red;
+    --border: var(--helper-border);
     --primary-color: #3498db;         /* Main theme color */
     --secondary-color: #2ecc71;       /* Secondary theme color */
     --accent-color: #e74c3c;          /* Accent color */

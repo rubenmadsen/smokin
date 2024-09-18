@@ -289,7 +289,7 @@ export default {
   text-align: left;
 }
 #right > div{
-  border: 1px dotted red;
+  border: var(--border);
   padding-bottom: 1rem;
 }
 .labelContainer{

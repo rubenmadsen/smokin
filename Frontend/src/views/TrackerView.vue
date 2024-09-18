@@ -8,7 +8,9 @@
     <div class="graphContainer">
       <h2>Moas brutalt feta graf</h2>
     </div>
+    <div class="separator">
 
+    </div>
     <div class="sliderContainer">
       <div class="buttonContainer">
       <button

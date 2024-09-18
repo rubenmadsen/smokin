@@ -125,7 +125,7 @@ export default {
   margin-top: 1rem;
 }
 .slider {
-  width: 60%;
+  width: 400px;
   margin-right: 20px;
 
 }

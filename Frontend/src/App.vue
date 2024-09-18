@@ -112,7 +112,7 @@ h1, h2, h3, h4, h5, h6, p, span {
 .ribbonContainer {
   display: flex;
   border-top: 1px solid var(--text-color);
-  border-bottom: 1px solid var(--text-color);
+  /* border-bottom: 1px solid var(--text-color); */
   margin-top: 150px;
   height: 500px;
 }
@@ -131,13 +131,14 @@ h1, h2, h3, h4, h5, h6, p, span {
 }
 .resolutionInfo p{
   margin-bottom: 1rem;
+  color: var(--nav-color);
+  font-weight: bold;
 }
 .routerContainer {
   position: relative;
   max-width: 1200px;
   display: flex;
   flex-direction: column; 
-
   margin: 0 auto;
   min-height: calc(100vh - 71px);
   box-shadow: var(--strong-shadow) 0px 5px 15px;

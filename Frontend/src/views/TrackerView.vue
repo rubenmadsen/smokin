@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="dashboard">
-    <DashMeter></DashMeter>
+    <DashMeter ref="dashMeter"></DashMeter>
   </div>
   
   <div class="ribbonContainer ">
@@ -90,6 +90,7 @@ export default {
         .then(response => {
           console.log("Data successfully submitted:", response);
           alert("Data successfully submitted!");
+          this.$refs.dashMeter.getData();
         })
         .catch(error => {
           console.error("Error submitting data:", error);
@@ -124,8 +125,9 @@ export default {
   margin-top: 1rem;
 }
 .slider {
-  width: 80%;
+  width: 60%;
   margin-right: 20px;
+
 }
 .buttonContainer{
   

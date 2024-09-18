@@ -52,9 +52,9 @@
             for (let i = 1 ; i<this.values.length-1; i++){
                 const current = this.values[i];
                 let diff = this.calculateDifferenceInDates(new Date(previous.date), new Date(current.date));
+                console.log("Difference:" + diff + " days with:" + previous.amount +  " puffs")
                 totalRealPuffs += (diff * previous.amount);
                 previous = current;
-
             }
             let diff = this.calculateDifferenceInDates(new Date(previous.date), new Date());
             totalRealPuffs += (diff * previous.amount);
@@ -63,15 +63,20 @@
             let pacPrice = 67;
             this.money = (pacPrice*(smokedCigarettes / 20));
             this.life = smokedCigarettes * 11;
+            console.log("Money:" + this.money);
+            console.log(" Life:" + this.life);
             if (this.money > 1000)
                 this.moneyUnit = "tkr";
             if (this.life > 60 * 24)
                 this.lifeUnit = "days";
-            else if (this.life > 60)
+            else if (this.life > 60){
                 this.lifeUnit = "hours";
+                this.life /= 60;
+            }
+
             this.money = Math.round(this.money);
             this.life = Math.round(this.life);
-
+            
         },
         async getData(){
             try{

@@ -125,7 +125,7 @@ export default {
   },
   data() {
     return {
-      inputData: "", // This is your original input data
+      inputData: "", 
       selectedButton: "Cigarette", // Cigarette button by default, then it changes to the selected by user
       sliderValueAmountInfo: this.data || "No data", // Default slider value
       sliderValueYearsInfo: this.years || "No data",
@@ -136,7 +136,7 @@ export default {
       fetchError: false,
       chartData: {
         labels: [],
-        datasets: [{ data: [] }],
+        datasets: [{ data: [] }, {descriptions: []}],
       },
       chartOptions: {
        
@@ -144,12 +144,12 @@ export default {
         plugins: {
           legend: { display: false },
           tooltip: {
-            callbacks: {
-              label: function (context) {
-                return context.dataset.label + ": " + context.raw;
-              },
-            },
-          },
+      callbacks: {
+        label: (context) => this.tooltipLabel(context), 
+      },
+    },
+
+
         },
         scales: {
           x: {
@@ -196,6 +196,14 @@ export default {
   },
 
   methods: {
+    tooltipLabel(context) {
+    const datasetLabel = context.dataset.label;
+    const value = context.raw;
+    const description = context.chart.data.datasets[1].descriptions[context.dataIndex] || '';
+
+    const descriptionLines = this.splitDescription(description, 30);
+    return [`${datasetLabel}: ${value}`, ...descriptionLines];
+  },
     toggleButton(button) {
       if (button == "Cigarette") {
         this.getData("cig");
@@ -207,17 +215,57 @@ export default {
       this.moneySpendingRate = this.selectedButton === "Cigarette" ? 4 : 2;
     },
 
+    splitDescription(description, maxChars) {
+      const words = description.split(' ');
+      let currentLine = '';
+      const lines = [];
+
+      words.forEach((word) => {
+        if ((currentLine + word).length > maxChars) {
+          lines.push(currentLine.trim());
+          currentLine = word + ' ';
+        } else {
+          currentLine += word + ' ';
+        }
+      });
+
+      if (currentLine) {
+        lines.push(currentLine.trim());
+      }
+
+      return lines;
+    },
+
     async getData(cigarrette_type) {
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        const response = await axios.get(
+        const responseSubstanceConcentration = await axios.get(
           URL_FOR_LOCAL_HOST +
             "GetSubstancesAndConcentrations/" +
             cigarrette_type
         );
         // Make the API call
+        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const responseDescription = await axios.get(
+          URL_FOR_LOCAL_HOST + 'GetSubstanceCategoryAndDescription'
+        );
+        // Make the API call
 
-        const toxins = response.data.Value;
+        const toxinsDescription = responseDescription.data.Value;
+
+        // Create lists for toxin names and amounts
+        const descriptions = toxinsDescription.map((toxin) => toxin.description);
+      
+
+        console.log("descriptionLisr" + descriptions);
+        
+
+   
+      
+
+
+        const toxins = responseSubstanceConcentration.data.Value;
 
         // Create lists for toxin names and amounts
         const toxinNames = toxins.map((toxin) => toxin.toxinName);
@@ -233,7 +281,12 @@ export default {
             {
               label: "Concentration",
               data: amounts,
+             
             },
+            {
+              label: "Description",
+              descriptions: descriptions,
+            }
           ],
         };
         // Return the transformed list
@@ -242,6 +295,7 @@ export default {
         this.fetchError = true;
       }
     },
+
   },
   computed: {
     receivedData() {
@@ -270,6 +324,7 @@ export default {
 
   mounted: function () {
     this.getData("cig");
+
   },
 
   trackerLink() {

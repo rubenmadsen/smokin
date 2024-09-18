@@ -108,6 +108,14 @@ h1, h2, h3, h4, h5, h6, p, span {
   color: var(--text-color);
 }
 
+span{
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-normal);
+}
+p {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-normal);
+}
 
 .ribbonContainer {
   display: flex;

@@ -2,11 +2,15 @@
   <div class="ribbonContainer">
     <div id="left">
       <div style="border: var(--border);">
-        <h1 :style="{ color: 'white' }">You have spent {{ moneySpent }} SEK.</h1>
-        <h1 :style="{ color: 'white' }">
-          Your life expecancy has decreased by
-          {{ decreasedLifeExpectancy }} minutes.
-        </h1>
+        <span :style="{ color: 'white' }">You have spent </span> 
+        <span class="value">{{ moneySpent }} </span>
+        <span> SEK.</span>
+        
+        <span :style="{ color: 'white' }">
+          Your life expecancy has decreased by </span>
+          <span class="value">{{ decreasedLifeExpectancy }} </span>
+          <span> minutes.</span>
+        
 
         <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
           <button class="std-button">Do something</button>
@@ -16,8 +20,6 @@
       <div style="border: var(--border); height: 190px;">
 
       </div>
-
-
 
       <div style="border: var(--border);">
       <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }"
@@ -33,7 +35,7 @@
     
     <div id="right">
       <div class="labelContainer">
-          <p>Hur mycket har du bränt?</p>
+          <p style="font-size: var(--font-size-xxlarge); margin-bottom: 2rem;">Try entering your smoking habits</p>
       </div>
       <div class="inputContainer">
         <button
@@ -180,10 +182,17 @@ export default {
 .inputContainer{
   text-align: center;
 }
+.inputContainer p{
+  text-align: left;
+}
 #left {
   color: var(--text-color);
   flex: 1.2;
   padding: 1rem;
+}
+.value{
+  font-style: italic;
+  font-size: x-large;
 }
 #right {
   flex: 1;
@@ -194,9 +203,7 @@ export default {
   border: var(--border);
   padding-bottom: 1rem;
 }
-#right > p{
-  text-align: left;
-}
+
 #goBtn {
   display: inline;
 }

@@ -111,7 +111,7 @@ li a:hover svg path {
   border-bottom: 1px solid var(--text-color);
   margin-top: 150px;
   height: 500px;
-  background-color: var(--primary-color);
+  background-color: var(--text-color);
 }
 .home{
   padding: 1rem;
@@ -138,7 +138,7 @@ li a:hover svg path {
   margin: 0 auto;
   min-height: calc(100vh - 71px);
   box-shadow: var(--strong-shadow) 0px 5px 15px;
-  background-color: var(--background-color);
+  background-color: var(--text-color);
 }
 
 /* Hide */

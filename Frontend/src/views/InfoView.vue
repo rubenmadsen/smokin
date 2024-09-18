@@ -299,8 +299,8 @@ export default {
   background-color: var(--text-color);
   text-align: left;
 }
-#right > div {
-  border: 1px dotted red;
+#right > div{
+  border: var(--border);
   padding-bottom: 1rem;
 }
 .labelContainer {

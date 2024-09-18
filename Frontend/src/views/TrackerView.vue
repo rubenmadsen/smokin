@@ -110,7 +110,7 @@ export default {
   margin-top: 0;
 }
 .graphContainer{
-  border: 1px dotted red;
+  border: var(--border);
   text-align: center;
 }
 .sliderContainer {

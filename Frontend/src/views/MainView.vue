@@ -1,17 +1,33 @@
 <template>
   <div class="ribbonContainer">
     <div id="left">
+      <div style="border: var(--border);">
+        <h1 :style="{ color: 'white' }">You have spent {{ moneySpent }} SEK.</h1>
+        <h1 :style="{ color: 'white' }">
+          Your life expecancy has decreased by
+          {{ decreasedLifeExpectancy }} minutes.
+        </h1>
+
+        <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
+          <button class="std-button">Do something</button>
+        </router-link>
+      </div>
+
+      <div style="border: var(--border); height: 190px;">
+
+      </div>
+
+
+
+      <div style="border: var(--border);">
       <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }"
         ><h1 class="non-selectable">Jag vill veta mer hur rökning påverkar mig!!</h1></router-link
-      >
-      <h1 :style="{ color: 'white' }">
-        Your life expecancy has decreased by
-        {{ decreasedLifeExpectancy }} minutes.
-      </h1>
-      <h1 :style="{ color: 'white' }">You have spent {{ moneySpent }} SEK.</h1>
+        >
+      
       <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
-        <button class="std-button">Jag vill förändra mitt liv nu!</button>
+        <button class="std-button">Let's go!</button>
       </router-link>
+      </div>
     </div>
 
     
@@ -152,7 +168,7 @@ export default {
   padding: 1rem;
 }
 #right > div{
-  border: 1px dashed red;
+  border: var(--border);
   padding-bottom: 1rem;
 }
 #goBtn {

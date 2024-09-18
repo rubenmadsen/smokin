@@ -125,7 +125,7 @@ export default {
   },
   data() {
     return {
-      inputData: "", 
+      inputData: "",
       selectedButton: "Cigarette", // Cigarette button by default, then it changes to the selected by user
       sliderValueAmountInfo: this.data || "No data", // Default slider value
       sliderValueYearsInfo: this.years || "No data",
@@ -136,34 +136,34 @@ export default {
       fetchError: false,
       chartData: {
         labels: [],
-        datasets: [{ data: [] }, {descriptions: []}],
+        datasets: [{ data: [] }, { descriptions: [] }],
       },
       chartOptions: {
-       
+        
         responsive: true,
         plugins: {
           legend: { display: false },
           tooltip: {
-      callbacks: {
-        label: (context) => this.tooltipLabel(context), 
-      },
-    },
-
-
+            callbacks: {
+              label: (context) => this.tooltipLabel(context),
+            },
+          },
         },
         scales: {
           x: {
             display: true, // Ensure x-axis is displayed
             title: {
               display: true,
+              
             },
             ticks: {
               autoSkip: false, // Ensure all labels are shown
               maxRotation: 90, // Rotate labels if necessary
-              minRotation:70,
+              minRotation: 70,
+              color: 'rgb(255, 255, 255)',
               font: {
-                        size: 16
-                    }
+                size: 16,
+              },
             },
             grid: {
               display: false, // Hide grid lines if not needed
@@ -173,11 +173,14 @@ export default {
             display: true,
             beginAtZero: true,
             type: "logarithmic", // Assuming you need logarithmic scale
+            
             grid: {
               display: true,
               drawBorder: false,
+              color: 'rgb(255, 255, 255)',
             },
             ticks: {
+              color: 'rgb(255, 255, 255)',
               maxTicksLimit: 15,
               callback: function (value) {
                 if (Math.abs(value) < 1) {
@@ -197,13 +200,14 @@ export default {
 
   methods: {
     tooltipLabel(context) {
-    const datasetLabel = context.dataset.label;
-    const value = context.raw;
-    const description = context.chart.data.datasets[1].descriptions[context.dataIndex] || '';
+      const datasetLabel = context.dataset.label;
+      const value = context.raw;
+      const description =
+        context.chart.data.datasets[1].descriptions[context.dataIndex] || "";
 
-    const descriptionLines = this.splitDescription(description, 30);
-    return [`${datasetLabel}: ${value}`, ...descriptionLines];
-  },
+      const descriptionLines = this.splitDescription(description, 30);
+      return [`${datasetLabel}: ${value}`, ...descriptionLines];
+    },
     toggleButton(button) {
       if (button == "Cigarette") {
         this.getData("cig");
@@ -216,16 +220,16 @@ export default {
     },
 
     splitDescription(description, maxChars) {
-      const words = description.split(' ');
-      let currentLine = '';
+      const words = description.split(" ");
+      let currentLine = "";
       const lines = [];
 
       words.forEach((word) => {
         if ((currentLine + word).length > maxChars) {
           lines.push(currentLine.trim());
-          currentLine = word + ' ';
+          currentLine = word + " ";
         } else {
-          currentLine += word + ' ';
+          currentLine += word + " ";
         }
       });
 
@@ -245,25 +249,21 @@ export default {
             cigarrette_type
         );
         // Make the API call
-        
+
         await new Promise((resolve) => setTimeout(resolve, 1000));
         const responseDescription = await axios.get(
-          URL_FOR_LOCAL_HOST + 'GetSubstanceCategoryAndDescription'
+          URL_FOR_LOCAL_HOST + "GetSubstanceCategoryAndDescription"
         );
         // Make the API call
 
         const toxinsDescription = responseDescription.data.Value;
 
         // Create lists for toxin names and amounts
-        const descriptions = toxinsDescription.map((toxin) => toxin.description);
-      
+        const descriptions = toxinsDescription.map(
+          (toxin) => toxin.description
+        );
 
         console.log("descriptionLisr" + descriptions);
-        
-
-   
-      
-
 
         const toxins = responseSubstanceConcentration.data.Value;
 
@@ -281,12 +281,14 @@ export default {
             {
               label: "Concentration",
               data: amounts,
-             
+              backgroundColor: 'rgb(255, 255, 255)',
+              borderColor:'rgb(255, 255, 255)',
+ 
             },
             {
               label: "Description",
               descriptions: descriptions,
-            }
+            },
           ],
         };
         // Return the transformed list
@@ -295,7 +297,6 @@ export default {
         this.fetchError = true;
       }
     },
-
   },
   computed: {
     receivedData() {
@@ -324,7 +325,6 @@ export default {
 
   mounted: function () {
     this.getData("cig");
-
   },
 
   trackerLink() {
@@ -351,10 +351,10 @@ export default {
 #right {
   flex: 1;
   padding: 1rem;
-  background-color: var(--text-color);
+  background-color: #2c3e50;
   text-align: left;
 }
-#right > div{
+#right > div {
   border: var(--border);
   padding-bottom: 1rem;
 }

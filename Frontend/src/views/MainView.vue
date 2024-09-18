@@ -2,22 +2,23 @@
   <div class="ribbonContainer">
     <div id="left">
       <div style="border: var(--border);">
-        <span :style="{ color: 'white' }">You have spent </span> 
+        <div>
+        <span>You have spent </span> 
         <span class="value">{{ moneySpent }} </span>
         <span> SEK.</span>
         
-        <span :style="{ color: 'white' }">
+        <span style="">
           Your life expecancy has decreased by </span>
           <span class="value">{{ decreasedLifeExpectancy }} </span>
           <span> minutes.</span>
-        
+        </div>
 
         <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
-          <button class="std-button">Do something</button>
+          <button style="margin-top: 1.2rem;" class="std-button">Do something</button>
         </router-link>
       </div>
 
-      <div style="border: var(--border); height: 190px;">
+      <div style="border: var(--border); height: 50px;">
 
       </div>
 
@@ -27,7 +28,7 @@
         >
       
       <!-- <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }"> -->
-        <button @click="handleSubmit" class="std-button">Let's go!</button>
+        <button style="margin-top: 1.2rem;" @click="handleSubmit" class="std-button">Let's go!</button>
       <!-- </router-link> -->
       </div>
     </div>
@@ -39,6 +40,7 @@
       </div>
       <div class="inputContainer">
         <button
+        style="margin-right: 0.4rem;"
           class="button-custom-1"
           :class="{ 'button-pressed-1': selectedButton === 'Cigarette' }"
           @click="toggleButton('Cigarette')"
@@ -190,9 +192,12 @@ export default {
   flex: 1.2;
   padding: 1rem;
 }
+#left span{
+  font-size: var(--font-size-xlarge);
+}
 .value{
   font-style: italic;
-  font-size: x-large;
+  
 }
 #right {
   flex: 1;

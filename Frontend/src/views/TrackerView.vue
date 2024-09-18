@@ -133,7 +133,7 @@ export default {
   
 }
 .buttonContainer button{
-  margin: 0.5rem;
+  margin-right: 0.4rem;
 }
 .submitButton {
   padding: 10px 20px;

@@ -14,23 +14,21 @@
         </div>
 
         <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
-          <button style="margin-top: 1.2rem;" class="std-button">Do something</button>
+          <button style="margin-top: 1.2rem;" class="std-button">Tell me more about this</button>
         </router-link>
       </div>
 
-      <div style="border: var(--border); height: 50px;">
+      <div style="border: var(--border); height: 100px;">
 
       </div>
 
       <div style="border: var(--border);">
-      <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }"
-        ><h1 class="non-selectable">Jag vill veta mer hur rökning påverkar mig!!</h1></router-link
-        >
-      
-      <!-- <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }"> -->
-        <button style="margin-top: 1.2rem;" @click="handleSubmit" class="std-button">Let's go!</button>
-      <!-- </router-link> -->
+        <span class="non-selectable">Do you want to reduce your smoking and make a positive impact on your life?</span>
       </div>
+      <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }">
+        <button style="margin-top: 1.2rem;" @click="handleSubmit" class="std-button">Let's go!</button>
+    </router-link>
+   
     </div>
 
     

@@ -13,7 +13,7 @@
           <span> minutes.</span>
         </div>
 
-        <router-link :to="{ path: '/tracker', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
+        <router-link :to="{ path: '/info', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
           <button style="margin-top: 1.2rem;" class="std-button">Tell me more about this</button>
         </router-link>
       </div>
@@ -56,9 +56,7 @@
       <div class="inputContainer">
         <p v-if="selectedButton">
           {{
-            selectedButton === "Cigarette"
-              ? `You have smoked ${sliderValueAmount} Cigarettes`
-              : `You have smoked ${sliderValueAmount} E-Cigarettes`
+              "How many cigarettes have you smoked on average: " + sliderValueAmount
           }}
         </p>
         <input

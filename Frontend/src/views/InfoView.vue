@@ -1,7 +1,6 @@
 <template>
   <div class="ribbonContainer">
     <div id="left">
-      
       <div id="app">
         <Bar
           ref="myChartRef"

@@ -61,14 +61,19 @@ export default defineComponent({
       numberOfCig: this.data || "No data",
       yearsOfSmoking: this.years || "No data",
       sliderValue: 50,
+      
       chartData: {
         datasets: [
           {
+            
+            
             label: 'Data',
-            data: [{x:1, y:10},{x:2, y:7},{x:3, y:7},{x:4, y:10},{x:5, y:2},{x:6, y:3}],
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
+            data: [{x:1, y:10},{x:2, y:7},{x:3, y:7},{x:4, y:10},{x:5, y:2},{x:6, y:3},{x:7, y:3},{x:8, y:3}],
+            backgroundColor:'rgb(255, 255, 255)',
+            borderColor: 'rgb(255, 255, 255)',
+           
             pointRadius: 5,
+            
           },
         ],
       },
@@ -77,17 +82,28 @@ export default defineComponent({
         maintainAspectRatio: false,
         scales: {
           x: {
+            ticks:{
+              color: 'rgb(255, 255, 255)'
+
+            },
             type: 'linear',
             position: 'bottom',
+            color: 'rgb(255, 255, 255)',
             title: {
               display: true,
               text: 'Days',
+              color: 'rgb(255, 255, 255)',
             },
           },
           y: {
+            ticks:{
+              color: 'rgb(255, 255, 255)'
+
+            },
             title: {
               display: true,
               text: 'Amount',
+              color: 'rgb(255, 255, 255)',
             },
           },
         },

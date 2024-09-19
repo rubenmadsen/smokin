@@ -1,12 +1,14 @@
 <template>
     <div class="mainContainer non-selectable">
         <div class="itemContainer">
-            <p class="value">{{ money + " "}} </p>
-            <p class="unit">{{ moneyUnit }}</p>
+          <p class="title">{{this.moneyTitle}}</p>
+          <p class="value">{{ money + " "}} </p>
+          <p class="unit">{{ moneyUnit }}</p>
         </div>
         <div class="itemContainer non-selectable">
-            <p class="value">{{ life + " "}} </p>
-            <p class="unit">{{ lifeUnit }}</p>
+          <p class="title">{{this.lifeTitle}}</p>
+          <p class="value">{{ life + " "}} </p>
+          <p class="unit">{{ lifeUnit }}</p>
         </div>
     </div>
   </template>
@@ -18,6 +20,8 @@
     name: 'DashMeter',
     data(){
         return{
+            moneyTitle: "Economy",
+            lifeTitle: "Longevity",
             money:0,
             life:0,
             moneyUnit:"kr",
@@ -118,6 +122,9 @@
         margin: 0px;
         text-align: center;
         height: 150px;
+    }
+    .title{
+      color: var(--background-color);
     }
     .itemContainer{
         position: relative;

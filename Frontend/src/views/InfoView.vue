@@ -10,6 +10,10 @@
           :data="chartData"
         />
       </div>
+
+      <div>
+        <span class="non-selectable">Do you want to reduce your smoking and make a positive impact on your life?</span>
+      </div>
       <router-link
         :to="{
           path: '/tracker',
@@ -19,9 +23,12 @@
           },
         }"
       >
-        <button class = std-button
-        >Jag vill förändra mitt liv nu!</button>
+
+        <button style="margin-top: 1rem" class = std-button
+        >Let's go!</button>
       </router-link>
+
+
     </div>
 
     <div id="right">
@@ -43,7 +50,7 @@
         >
           Cigarette
         </button>
-        <button
+        <button style="margin-left: 0.4rem"
           class="button-custom-2"
           :class="{ 'button-pressed-2': selectedButton === 'E-Cigarette' }"
           @click="toggleButton('E-Cigarette')"
@@ -351,6 +358,9 @@ export default {
 #left {
   flex: 1.2;
   padding: 1rem;
+}
+#left span{
+  font-size: var(--font-size-xlarge);
 }
 #right {
   flex: 1;

@@ -4,13 +4,13 @@
       <div style="border: var(--border);">
         <div>
         <span>You have spent </span> 
-        <span class="value">{{ moneySpent }} </span>
-        <span> SEK.</span>
+        <span class="value">{{ backend.krTo(moneySpent) }} </span>
+        <span>.</span>
         
         <span style="">
           Your life expecancy has decreased by </span>
-          <span class="value">{{ decreasedLifeExpectancy }} </span>
-          <span> minutes.</span>
+          <span class="value">{{ backend.minutesTo(decreasedLifeExpectancy) }} </span>
+          <span>.</span>
         </div>
 
         <router-link :to="{ path: '/info', query :{ data : this.sliderValueAmount, years: this.sliderValueYears } }">
@@ -25,7 +25,7 @@
       <div style="border: var(--border);">
         <span class="non-selectable">Do you want to reduce your smoking and make a positive impact on your life?</span>
       </div>
-      <router-link :to="{ path: '/info', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }">
+      <router-link :to="{ path: '/tracker', query :{data : this.sliderValueAmount, years: this.sliderValueYears} }">
         <button style="margin-top: 1.2rem;" @click="handleSubmit" class="std-button">Let's go!</button>
     </router-link>
    
@@ -85,6 +85,7 @@
 
 <script>
 import Backend from '@/services/backend.js';
+import backend from "@/services/backend.js";
 
 export default {
   name: "MainView",
@@ -123,6 +124,9 @@ export default {
   }
   },
   computed: {
+    backend() {
+      return backend
+    },
     decreasedLifeExpectancy() {
       // Calculate reduction in life expectancy
 

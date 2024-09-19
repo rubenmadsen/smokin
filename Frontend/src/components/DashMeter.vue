@@ -13,6 +13,7 @@
   
   <script>
   import Backend from '@/services/backend';
+  import backend from "@/services/backend";
   export default {
     name: 'DashMeter',
     data(){
@@ -71,17 +72,24 @@
             this.life = smokedCigarettes * 11;
             console.log("Money:" + this.money);
             console.log(" Life:" + this.life);
-            if (this.money > 1000)
-                this.moneyUnit = "tkr";
-            if (this.life > 60 * 24)
-                this.lifeUnit = "days";
-            else if (this.life > 60){
-                this.lifeUnit = "hours";
-                this.life /= 60;
-            }
+            let moneyArr = backend.krTo(this.money).split(" ");
+            let lifeArr = backend.minutesTo(this.life).split(" ");
+            this.money = moneyArr[0];
+            this.moneyUnit = moneyArr[1];
+            this.life = lifeArr[0];
+            this.lifeUnit = lifeArr[1];
 
-            this.money = Math.round(this.money);
-            this.life = Math.round(this.life);
+            // if (this.money > 1000)
+            //     this.moneyUnit = "tkr";
+            // if (this.life > 60 * 24)
+            //     this.lifeUnit = "days";
+            // else if (this.life > 60){
+            //     this.lifeUnit = "hours";
+            //     this.life /= 60;
+            // }
+            //
+            // this.money = Math.round(this.money);
+            // this.life = Math.round(this.life);
             
         },
         async getData(){

@@ -109,7 +109,7 @@ class Backend {
   }
   static krTo(kr) {
     if (kr < 1000) {
-      return `${kr} kr`;
+      return `${kr.toFixed(1)} kr`;
     } else if (kr < 1000000) {
       const tkr = (kr / 1000).toFixed(1);
       return `${tkr} tkr`;

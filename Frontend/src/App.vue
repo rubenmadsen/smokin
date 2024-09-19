@@ -51,6 +51,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   color: #2c3e50;
+  margin-bottom: 7rem;
 }
 
 .navbar {

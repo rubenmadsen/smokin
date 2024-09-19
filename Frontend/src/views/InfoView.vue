@@ -1,6 +1,15 @@
 <template>
   <div class="ribbonContainer">
     <div id="left">
+      
+      <div id="app">
+        <Bar
+          ref="myChartRef"
+          id="my-chart-id"
+          :options="chartOptions"
+          :data="chartData"
+        />
+      </div>
       <router-link
         :to="{
           path: '/tracker',
@@ -10,17 +19,11 @@
           },
         }"
       >
-        <button>Jag vill förändra mitt liv nu!</button>
+        <button class = std-button
+        >Jag vill förändra mitt liv nu!</button>
       </router-link>
-      <div id="app">
-        <Bar
-          ref="myChartRef"
-          id="my-chart-id"
-          :options="chartOptions"
-          :data="chartData"
-        />
-      </div>
     </div>
+
     <div id="right">
       <div class="labelContainer">
         <h1 :style="{ color: 'white' }">
@@ -164,6 +167,7 @@ export default {
               font: {
                 size: 16,
               },
+              
             },
             grid: {
               display: false, // Hide grid lines if not needed
@@ -177,10 +181,10 @@ export default {
             grid: {
               display: true,
               drawBorder: false,
-              color: 'rgb(255, 255, 255)',
+              color: 'rgb(200, 200, 200)',
             },
             ticks: {
-              color: 'rgb(255, 255, 255)',
+              color: 'rgb(200, 200, 200)',
               maxTicksLimit: 15,
               callback: function (value) {
                 if (Math.abs(value) < 1) {
@@ -281,7 +285,7 @@ export default {
             {
               label: "Concentration",
               data: amounts,
-              backgroundColor: 'rgb(255, 255, 255)',
+              backgroundColor: 'rgb(200, 200, 200)',
               borderColor:'rgb(255, 255, 255)',
  
             },
@@ -402,4 +406,6 @@ export default {
 .button-pressed-2 {
   background-color: #2980b9; /* Darker color when pressed */
 }
+
+
 </style>

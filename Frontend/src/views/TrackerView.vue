@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="dashboard">
+      <span>You have saved {{ savedMoney }} and increased your life expectancy by {{ savedLife }}</span>
     <DashMeter ref="dashMeter"></DashMeter>
   </div>
   
@@ -60,12 +61,17 @@ export default {
   data() {
     return {
       //typeOfConsumable: this.consumableType || "No data",
+      savedLife: "0",
+      savedMoney: "0",
       selectedButton: "Cigarette", // Cigarette button by default, then it changes to the selected by user
       numberOfCig: this.data || "No data",
       yearsOfSmoking: this.years || "No data",
       sliderValue: 50, // Default slider value
     };
   },
+  mounted() {
+        this.savedLife = this.$refs.dashMeter.getMoneySaved();
+    },
   computed: {
     receivedData() {
       return this.$route.query.data || "No data received";

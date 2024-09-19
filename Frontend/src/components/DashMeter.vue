@@ -34,6 +34,12 @@
         };
     },
     methods: {
+        getMoneySaved(){
+            return this.money;
+        },
+        getLifeSaved(){
+            return this.life;
+        },
         calculateDifferenceInDates(start, end){
             const difference = end - start;
             let dayDifference = Math.floor(difference / (1000 * 60 * 60 * 24));

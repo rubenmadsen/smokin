@@ -35,10 +35,10 @@
       <div class="labelContainer">
         <h1 :style="{ color: 'white' }">
           Your life expecancy has decreased by
-          {{ decreasedLifeExpectancy }} minutes.
+          {{ backend.minutesTo(decreasedLifeExpectancy) }}.
         </h1>
         <h1 :style="{ color: 'white' }">
-          You have spent {{ moneySpent }} SEK.
+          You have spent {{ backend.krTo(moneySpent) }}.
         </h1>
       </div>
 
@@ -103,6 +103,7 @@ import {
   LinearScale,
   LogarithmicScale,
 } from "chart.js";
+import backend from "@/services/backend.js";
 
 ChartJS.register(
   Title,
@@ -310,6 +311,9 @@ export default {
     },
   },
   computed: {
+    backend() {
+      return backend
+    },
     receivedData() {
       return this.$route.query.data || "No data received";
     },
